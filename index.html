@@ -4,13 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mes comptes — privé</title>
-  <meta name="theme-color" content="#0f172a">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Mes Comptes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,12 +13,6 @@
         <div class="logo"><img src="logo-ba.jpg" alt="Logo B.A"></div>
         <h1>Mes Comptes</h1>
       </div>
-
-      <nav class="nav">
-        <a class="active" href="#"><span>⌂</span> Tableau de bord</a>
-        <a href="#tableau"><span>☷</span> Dépenses</a>
-      </nav>
-
       <section class="moneyBox">
         <div class="rateHead">
           <strong>Salaire</strong>
@@ -162,14 +149,5 @@
   </dialog>
 
   <script src="script.js"></script>
-
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./service-worker.js").catch(() => {});
-    });
-  }
-</script>
-
 </body>
 </html>
