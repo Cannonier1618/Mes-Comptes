@@ -1,0 +1,1 @@
+V18 : correction responsive iPhone. Sur Mac le tableau reste classique ; sur iPhone les dépenses sont affichées en cartes verticales lisibles, sans scroll horizontal. Les devises CHF/EUR restent affichées dans les montants.

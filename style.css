@@ -130,9 +130,13 @@ tbody td{color:var(--text)}
 tbody td .readCell{opacity:.92}
 
 
-/* V16 — Scroll naturel + affichage mobile en cartes */
+
+
+
+/* V18 — Mobile propre : cartes iPhone, tableau Mac */
 html,
 body {
+  max-width: 100%;
   overflow-x: hidden;
 }
 
@@ -152,7 +156,7 @@ body {
   width: 100%;
 }
 
-/* Desktop : lignes plus fines, sans gêner le scroll vertical */
+/* Mac : lignes fines et lisibles */
 th,
 td {
   padding-top: 9px;
@@ -167,15 +171,91 @@ tbody tr {
   line-height: 1.25;
 }
 
-/* iPhone : plus de tableau horizontal, chaque dépense devient une carte */
+/* iPhone / petit écran */
 @media (max-width: 760px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .app {
+    display: block;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    border-radius: 0 0 26px 26px;
+  }
+
   .content {
-    padding-left: 16px;
-    padding-right: 16px;
+    width: 100%;
+    padding: 18px 14px 36px;
+    overflow: visible;
+  }
+
+  .topbar {
+    display: grid;
+    gap: 14px;
+  }
+
+  .topbar h2 {
+    font-size: 28px;
+    line-height: 1.05;
+  }
+
+  .topActions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .topActions button {
+    width: 100%;
+  }
+
+  .cards,
+  .cardsV3 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .card {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .card strong {
+    font-size: 26px;
+  }
+
+  .toolbar {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .searchBox,
+  .toolbar select,
+  .searchBox input {
+    width: 100%;
+  }
+
+  .tablePanel {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
   }
 
   .tableWrap {
     overflow: visible;
+    padding: 0;
   }
 
   table,
@@ -185,6 +265,7 @@ tbody tr {
   th,
   td {
     display: block;
+    width: 100%;
   }
 
   thead {
@@ -207,7 +288,7 @@ tbody tr {
   }
 
   html.dark tbody tr {
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.24);
   }
 
   tbody tr:hover td {
@@ -216,15 +297,16 @@ tbody tr {
 
   tbody td {
     border: 0;
-    padding: 4px 0;
+    padding: 3px 0;
     white-space: normal;
+    text-align: left;
   }
 
   tbody td.statusCell {
     position: absolute;
-    left: 10px;
-    top: 10px;
-    width: 16px;
+    left: 12px;
+    top: 12px;
+    width: 14px;
     padding: 0;
   }
 
@@ -232,15 +314,29 @@ tbody tr {
     padding-left: 24px;
     color: var(--muted);
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 800;
+    line-height: 1.2;
   }
 
   tbody td:nth-child(3) {
     padding-left: 24px;
     font-size: 15px;
-    font-weight: 800;
+    font-weight: 850;
     color: var(--text);
-    margin-bottom: 4px;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+
+  tbody td:nth-child(4),
+  tbody td:nth-child(5),
+  tbody td:nth-child(6),
+  tbody td:nth-child(7) {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.25;
   }
 
   tbody td:nth-child(4)::before {
@@ -259,35 +355,35 @@ tbody tr {
     content: "Solde";
   }
 
-  tbody td:nth-child(4),
-  tbody td:nth-child(5),
-  tbody td:nth-child(6),
-  tbody td:nth-child(7) {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    font-size: 13px;
-  }
-
   tbody td:nth-child(4)::before,
   tbody td:nth-child(5)::before,
   tbody td:nth-child(6)::before,
   tbody td:nth-child(7)::before {
     color: var(--muted);
-    font-weight: 700;
+    font-weight: 750;
+  }
+
+  tbody td:nth-child(4) .readCell,
+  tbody td:nth-child(5) .readCell,
+  tbody td:nth-child(6),
+  tbody td:nth-child(7) {
+    text-align: right;
   }
 
   tbody td:nth-child(8) {
-    padding-top: 8px;
+    padding-top: 10px;
   }
 
   .rowActions {
     justify-content: flex-end;
+    gap: 8px;
   }
 
   .iconBtn {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
   }
 
   .cornerMarker {
@@ -304,5 +400,14 @@ tbody tr {
 
   .simpleTip {
     display: none !important;
+  }
+
+  dialog {
+    width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
+  }
+
+  .modal {
+    padding: 18px;
   }
 }
