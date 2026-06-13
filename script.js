@@ -2,167 +2,49 @@ const INITIAL_DATA = {
   "salary": 4240,
   "rate": 0.9192,
   "expenses": [
-    {
-      "date": "2026-06-06",
-      "label": "Loyer",
-      "chf": 1690,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-19",
-      "label": "Netflix",
-      "chf": "",
-      "eur": 21.99
-    },
-    {
-      "date": "2026-06-12",
-      "label": "Prime Vidéo",
-      "chf": "",
-      "eur": 6.99
-    },
-    {
-      "date": "2026-06-10",
-      "label": "Disney+",
-      "chf": "",
-      "eur": 15.99
-    },
-    {
-      "date": "2026-06-24",
-      "label": "PlayStation",
-      "chf": "",
-      "eur": 8.99
-    },
-    {
-      "date": "2026-06-26",
-      "label": "AllDebrid",
-      "chf": "",
-      "eur": 2.99
-    },
-    {
-      "date": "2026-06-05",
-      "label": "Floa",
-      "chf": "",
-      "eur": 127.25
-    },
-    {
-      "date": "2026-06-05",
-      "label": "YouTube",
-      "chf": "",
-      "eur": 16.99
-    },
-    {
-      "date": "2026-06-29",
-      "label": "One",
-      "chf": "",
-      "eur": 19.95
-    },
-    {
-      "date": "2026-06-22",
-      "label": "Cloud Apple",
-      "chf": "",
-      "eur": 0.99
-    },
-    {
-      "date": "2026-06-23",
-      "label": "Salt / Mobile+Fibre",
-      "chf": 60.9,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-08",
-      "label": "Helsana",
-      "chf": 391.5,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-26",
-      "label": "AXA Assurance",
-      "chf": 77,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-26",
-      "label": "Plaque Voiture",
-      "chf": 28,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-26",
-      "label": "La Mobilière RC/Ménage",
-      "chf": 11.25,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-06",
-      "label": "ULTRA Revolut",
-      "chf": 65,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-26",
-      "label": "AXA Caution",
-      "chf": 14.5,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-26",
-      "label": "Redevance TV",
-      "chf": 28,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-20",
-      "label": "Electricité",
-      "chf": 80,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-21",
-      "label": "Essence",
-      "chf": 200,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-22",
-      "label": "Course Piccard/Carrefour",
-      "chf": "",
-      "eur": 335.08
-    },
-    {
-      "date": "2026-06-17",
-      "label": "Course Suisse",
-      "chf": 200,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-05",
-      "label": "Plaisir",
-      "chf": 400,
-      "eur": ""
-    },
-    {
-      "date": "2026-06-06",
-      "label": "Bourse",
-      "chf": 100,
-      "eur": ""
-    },
-    {
-      "date": "2026-11-02",
-      "label": "Sport",
-      "chf": 80,
-      "eur": ""
-    }
+    {"date": "2026-06-06", "label": "Loyer", "chf": 1690, "eur": ""},
+    {"date": "2026-06-19", "label": "Netflix", "chf": "", "eur": 21.99},
+    {"date": "2026-06-12", "label": "Prime Vidéo", "chf": "", "eur": 6.99},
+    {"date": "2026-06-10", "label": "Disney+", "chf": "", "eur": 15.99},
+    {"date": "2026-06-24", "label": "PlayStation", "chf": "", "eur": 8.99},
+    {"date": "2026-06-26", "label": "AllDebrid", "chf": "", "eur": 2.99},
+    {"date": "2026-06-05", "label": "Floa", "chf": "", "eur": 127.25},
+    {"date": "2026-06-05", "label": "YouTube", "chf": "", "eur": 16.99},
+    {"date": "2026-06-29", "label": "One", "chf": "", "eur": 19.95},
+    {"date": "2026-06-22", "label": "Cloud Apple", "chf": "", "eur": 0.99},
+    {"date": "2026-06-23", "label": "Salt / Mobile+Fibre", "chf": 60.9, "eur": ""},
+    {"date": "2026-06-08", "label": "Helsana", "chf": 391.5, "eur": ""},
+    {"date": "2026-06-26", "label": "AXA Assurance", "chf": 77, "eur": ""},
+    {"date": "2026-06-26", "label": "Plaque Voiture", "chf": 28, "eur": ""},
+    {"date": "2026-06-26", "label": "La Mobilière RC/Ménage", "chf": 11.25, "eur": ""},
+    {"date": "2026-06-06", "label": "ULTRA Revolut", "chf": 65, "eur": ""},
+    {"date": "2026-06-26", "label": "AXA Caution", "chf": 14.5, "eur": ""},
+    {"date": "2026-06-26", "label": "Redevance TV", "chf": 28, "eur": ""},
+    {"date": "2026-06-20", "label": "Electricité", "chf": 80, "eur": ""},
+    {"date": "2026-06-21", "label": "Essence", "chf": 200, "eur": ""},
+    {"date": "2026-06-22", "label": "Course Piccard/Carrefour", "chf": "", "eur": 335.08},
+    {"date": "2026-06-17", "label": "Course Suisse", "chf": 200, "eur": ""},
+    {"date": "2026-06-05", "label": "Plaisir", "chf": 400, "eur": ""},
+    {"date": "2026-06-06", "label": "Bourse", "chf": 100, "eur": ""},
+    {"date": "2026-11-02", "label": "Sport", "chf": 80, "eur": ""}
   ]
 };
-const STORAGE_KEY = "mes-comptes-v11-ultime";
+
+const STORAGE_KEY = "mes-comptes-v12-finale";
+const SUPABASE_URL = "https://fbefapylkbzvbncowjmf.supabase.co";
+const SUPABASE_KEY = "sb_publishable_a8tU5B_VVCpOOdX6ekyTdA_WcK72wxi";
+const API_BASE = `${SUPABASE_URL}/rest/v1`;
 
 const STATUS_META = {
   "": {label:"Sans repère", help:"Aucun repère particulier."},
   todo: {label:"À définir", help:"Montant à confirmer"}
 };
 
-let state = loadState();
+let state = loadLocalState();
 let editingIndex = null;
+let cloudReady = false;
+let isSavingCloud = false;
+let lastCloudSignature = "";
 
 const els = {
   salary: document.querySelector("#salary"),
@@ -194,10 +76,129 @@ const els = {
   saveExpense: document.querySelector("#saveExpense")
 };
 
-function loadState(){
+function headers(extra = {}) {
+  return {
+    apikey: SUPABASE_KEY,
+    Authorization: `Bearer ${SUPABASE_KEY}`,
+    "Content-Type": "application/json",
+    ...extra
+  };
+}
+
+async function supabaseFetch(path, options = {}) {
+  const response = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: headers(options.headers || {})
+  });
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(`Supabase ${response.status}: ${text}`);
+  }
+  if (response.status === 204) return null;
+  return response.json().catch(() => null);
+}
+
+function cloudSignature(data = state) {
+  return JSON.stringify({
+    salary: Number(data.salary || 0),
+    rate: Number(data.rate || 0),
+    expenses: (data.expenses || []).map(normalizeExpense)
+  });
+}
+
+async function loadCloudState({silent = false} = {}) {
   try {
-    const savedV4 = localStorage.getItem(STORAGE_KEY);
-    if (savedV4) return migrateState(JSON.parse(savedV4));
+    const settings = await supabaseFetch("/settings?select=*&id=eq.1&limit=1");
+    const expenses = await supabaseFetch("/expenses?select=*&order=position.asc,id.asc");
+
+    if ((!settings || !settings.length) && (!expenses || !expenses.length)) {
+      await saveCloudState();
+      cloudReady = true;
+      lastCloudSignature = cloudSignature();
+      return;
+    }
+
+    const s = settings && settings[0] ? settings[0] : {};
+    state = migrateState({
+      salary: s.salary ?? state.salary ?? INITIAL_DATA.salary,
+      rate: s.rate ?? state.rate ?? INITIAL_DATA.rate,
+      expenses: (expenses || []).map(row => ({
+        date: row.date || "",
+        label: row.label || "",
+        chf: row.chf === null ? "" : Number(row.chf),
+        eur: row.eur === null ? "" : Number(row.eur),
+        status: row.status || ""
+      }))
+    });
+
+    saveLocalState();
+    lastCloudSignature = cloudSignature();
+    cloudReady = true;
+    render();
+  } catch (error) {
+    console.warn("Synchronisation Supabase impossible :", error);
+    cloudReady = false;
+    if (!silent) render();
+  }
+}
+
+async function saveCloudState() {
+  if (isSavingCloud) return;
+  isSavingCloud = true;
+  try {
+    state = migrateState(state);
+
+    const settingsPayload = {
+      id: 1,
+      salary: Number(state.salary || 0),
+      rate: Number(state.rate || 0)
+    };
+
+    await supabaseFetch("/settings", {
+      method: "POST",
+      headers: { Prefer: "resolution=merge-duplicates" },
+      body: JSON.stringify(settingsPayload)
+    });
+
+    await supabaseFetch("/expenses?id=gte.0", { method: "DELETE" });
+
+    const payload = state.expenses.map((e, index) => {
+      e = normalizeExpense(e);
+      return {
+        date: e.date || null,
+        label: e.label || "",
+        chf: e.chf === "" || e.chf == null ? null : Number(e.chf),
+        eur: e.eur === "" || e.eur == null ? null : Number(e.eur),
+        status: safeStatus(e.status || ""),
+        position: index
+      };
+    });
+
+    if (payload.length) {
+      await supabaseFetch("/expenses", {
+        method: "POST",
+        headers: { Prefer: "return=minimal" },
+        body: JSON.stringify(payload)
+      });
+    }
+
+    cloudReady = true;
+    lastCloudSignature = cloudSignature();
+  } catch (error) {
+    console.warn("Sauvegarde Supabase impossible :", error);
+    cloudReady = false;
+  } finally {
+    isSavingCloud = false;
+  }
+}
+
+function loadLocalState(){
+  try {
+    const savedV12 = localStorage.getItem(STORAGE_KEY);
+    if (savedV12) return migrateState(JSON.parse(savedV12));
+
+    const savedV11 = localStorage.getItem("mes-comptes-v11-ultime");
+    if (savedV11) return migrateState(JSON.parse(savedV11));
 
     const savedV10 = localStorage.getItem("mes-comptes-v10-echeance");
     if (savedV10) return migrateState(JSON.parse(savedV10));
@@ -205,7 +206,6 @@ function loadState(){
     const savedV3 = localStorage.getItem("mes-comptes-v3-statuts");
     if (savedV3) return migrateState(JSON.parse(savedV3));
 
-    // Migration automatique depuis l’ancienne version moderne/couleurs.
     const savedV1 = localStorage.getItem("mes-comptes-modern-v1");
     if (savedV1) return migrateState(JSON.parse(savedV1));
   } catch(e) {}
@@ -217,8 +217,13 @@ function migrateState(data){
   return data;
 }
 
-function saveState(){
+function saveLocalState(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function saveState(){
+  saveLocalState();
+  saveCloudState();
 }
 
 function money(value){
@@ -230,7 +235,6 @@ function moneyRound(value){
   const n = Math.round(Number(value || 0));
   return new Intl.NumberFormat("fr-CH", {minimumFractionDigits:0, maximumFractionDigits:0}).format(n) + " CHF";
 }
-
 
 function formatNumber(value){
   return new Intl.NumberFormat("fr-CH", {minimumFractionDigits:2, maximumFractionDigits:2}).format(Number(value || 0));
@@ -326,7 +330,7 @@ function render(){
   let running = Number(state.salary || 0);
   els.rows.innerHTML = "";
 
-  visible.forEach((e, visibleIndex) => {
+  visible.forEach((e) => {
     const converted = Number(e.eur || 0) * Number(state.rate || 0);
     running -= amountCHF(e);
     const st = safeStatus(e.status || "");
@@ -421,7 +425,7 @@ els.rows.addEventListener("click", event => {
 els.exportCsv.addEventListener("click", () => {
   const header = ["Échéance","Libellé","Montant CHF","Montant EUR","Conversion CHF","Total CHF","À définir"];
   const lines = [header];
-  state.expenses.forEach((e, i) => {
+  state.expenses.forEach((e) => {
     e = normalizeExpense(e);
     lines.push([formatEcheance(e.date || ""), e.label || "", e.chf || "", e.eur || "", ((e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "" : (Number(e.eur||0)*Number(state.rate||0)).toFixed(2)), amountCHF(e).toFixed(2), safeStatus(e.status || "") === "todo" ? "Oui" : ""]);
   });
@@ -447,10 +451,25 @@ els.themeToggle.addEventListener("click", () => {
   els.themeToggle.textContent = document.documentElement.classList.contains("dark") ? "☀️" : "🌙";
 });
 
-
 if (localStorage.getItem("mes-comptes-theme") === "dark") {
   document.documentElement.classList.add("dark");
   els.themeToggle.textContent = "☀️";
 }
 
 render();
+loadCloudState({silent: true});
+
+window.addEventListener("focus", () => {
+  if (!editingIndex && !isSavingCloud) loadCloudState({silent: true});
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && !isSavingCloud) loadCloudState({silent: true});
+});
+
+// Petite synchronisation automatique quand l'application reste ouverte sur Mac et iPhone.
+setInterval(() => {
+  if (!document.hidden && !isSavingCloud && !(els.dialog && els.dialog.open)) {
+    loadCloudState({silent: true});
+  }
+}, 8000);
