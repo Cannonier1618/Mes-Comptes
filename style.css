@@ -136,7 +136,10 @@ tbody td .readCell{opacity:.92}
 
 
 
-/* V19 — Supabase conservé + mobile vraiment lisible */
+
+
+
+/* V20 — iPhone corrigé : portrait en cartes, paysage en tableau scrollable */
 html,
 body {
   max-width: 100%;
@@ -155,11 +158,7 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-.tableWrap table {
-  width: 100%;
-}
-
-/* Mac : lignes fines */
+/* Mac : tableau normal + lignes fines */
 th,
 td {
   padding-top: 9px;
@@ -174,10 +173,17 @@ tbody tr {
   line-height: 1.25;
 }
 
-/* iPhone */
-@media (max-width: 760px) {
+/* iPhone portrait : cartes compactes */
+@media (max-width: 760px) and (orientation: portrait) {
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden !important;
+  }
+
   .app {
     display: block;
+    width: 100%;
     min-height: 100vh;
   }
 
@@ -253,8 +259,15 @@ tbody tr {
   }
 
   .tableWrap {
-    overflow: visible;
+    overflow: visible !important;
     padding: 0;
+    width: 100%;
+  }
+
+  .tableWrap table {
+    min-width: 0 !important;
+    width: 100% !important;
+    table-layout: auto !important;
   }
 
   table,
@@ -264,26 +277,31 @@ tbody tr {
   th,
   td {
     display: block;
-    width: 100%;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
   }
 
   thead {
-    display: none;
+    display: none !important;
   }
 
   tbody {
     display: grid;
     gap: 10px;
+    width: 100%;
   }
 
   tbody tr {
     position: relative;
-    height: auto;
+    height: auto !important;
+    min-height: 0 !important;
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: 18px;
     padding: 12px 12px 10px;
     box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
   }
 
   html.dark tbody tr {
@@ -295,9 +313,9 @@ tbody tr {
   }
 
   tbody td {
-    border: 0;
+    border: 0 !important;
     padding: 3px 0;
-    white-space: normal;
+    white-space: normal !important;
     text-align: left;
   }
 
@@ -310,7 +328,7 @@ tbody tr {
     position: absolute;
     left: 12px;
     top: 12px;
-    width: 14px;
+    width: 14px !important;
     padding: 0;
   }
 
@@ -335,10 +353,10 @@ tbody tr {
   tbody td:nth-child(5),
   tbody td:nth-child(6),
   tbody td:nth-child(7) {
-    display: flex;
-    justify-content: space-between;
+    display: grid !important;
+    grid-template-columns: 104px minmax(0, 1fr);
     align-items: baseline;
-    gap: 16px;
+    gap: 10px;
     font-size: 13px;
     line-height: 1.25;
   }
@@ -368,11 +386,28 @@ tbody tr {
   }
 
   tbody td:nth-child(4) .readCell,
-  tbody td:nth-child(5) .readCell,
+  tbody td:nth-child(5) .readCell {
+    justify-self: end;
+    text-align: right;
+    font-weight: 850;
+    color: #ef4444;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
   tbody td:nth-child(6),
   tbody td:nth-child(7) {
     text-align: right;
-    font-weight: 800;
+    font-weight: 850;
+    overflow-wrap: anywhere;
+  }
+
+  tbody td:nth-child(6) {
+    color: #ef4444;
+  }
+
+  tbody td:nth-child(7) {
+    color: #16a34a;
   }
 
   tbody td:nth-child(8) {
@@ -414,5 +449,91 @@ tbody tr {
 
   .modal {
     padding: 18px;
+  }
+}
+
+/* iPhone paysage : tableau classique avec scroll horizontal */
+@media (max-width: 940px) and (orientation: landscape) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .app {
+    display: block;
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+  }
+
+  .content {
+    padding: 18px;
+    overflow: visible;
+  }
+
+  .cards,
+  .cardsV3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tablePanel {
+    overflow: visible;
+  }
+
+  .tableWrap {
+    width: 100%;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    padding-bottom: 10px;
+  }
+
+  .tableWrap table {
+    min-width: 980px !important;
+    width: 980px !important;
+    max-width: none !important;
+    table-layout: auto;
+  }
+
+  table {
+    display: table !important;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  tbody {
+    display: table-row-group !important;
+  }
+
+  tr {
+    display: table-row !important;
+  }
+
+  th,
+  td {
+    display: table-cell !important;
+    width: auto !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+  }
+
+  .tableWrap::-webkit-scrollbar {
+    height: 9px;
+  }
+
+  .tableWrap::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .tableWrap::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.55);
+    border-radius: 999px;
   }
 }
