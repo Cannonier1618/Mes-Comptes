@@ -133,7 +133,10 @@ tbody td .readCell{opacity:.92}
 
 
 
-/* V18 — Mobile propre : cartes iPhone, tableau Mac */
+
+
+
+/* V19 — Supabase conservé + mobile vraiment lisible */
 html,
 body {
   max-width: 100%;
@@ -156,7 +159,7 @@ body {
   width: 100%;
 }
 
-/* Mac : lignes fines et lisibles */
+/* Mac : lignes fines */
 th,
 td {
   padding-top: 9px;
@@ -171,12 +174,8 @@ tbody tr {
   line-height: 1.25;
 }
 
-/* iPhone / petit écran */
+/* iPhone */
 @media (max-width: 760px) {
-  body {
-    overflow-x: hidden;
-  }
-
   .app {
     display: block;
     min-height: 100vh;
@@ -302,7 +301,12 @@ tbody tr {
     text-align: left;
   }
 
+  tbody td.emptyMobile {
+    display: none !important;
+  }
+
   tbody td.statusCell {
+    display: block !important;
     position: absolute;
     left: 12px;
     top: 12px;
@@ -324,17 +328,17 @@ tbody tr {
     font-weight: 850;
     color: var(--text);
     line-height: 1.25;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   tbody td:nth-child(4),
   tbody td:nth-child(5),
   tbody td:nth-child(6),
   tbody td:nth-child(7) {
-    display: grid;
-    grid-template-columns: 112px 1fr;
+    display: flex;
+    justify-content: space-between;
     align-items: baseline;
-    gap: 10px;
+    gap: 16px;
     font-size: 13px;
     line-height: 1.25;
   }
@@ -368,6 +372,7 @@ tbody tr {
   tbody td:nth-child(6),
   tbody td:nth-child(7) {
     text-align: right;
+    font-weight: 800;
   }
 
   tbody td:nth-child(8) {

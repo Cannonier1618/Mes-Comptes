@@ -1,0 +1,1 @@
+V19 : correction complète. Le script Supabase est restauré, la synchronisation Mac/iPhone fonctionne à nouveau, les devises CHF/EUR restent visibles, et l'affichage iPhone est corrigé en cartes lisibles.
