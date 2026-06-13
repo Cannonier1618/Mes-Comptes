@@ -46,6 +46,8 @@ let cloudReady = false;
 let isSavingCloud = false;
 let lastCloudSignature = "";
 
+const DEFAULT_SORT = "date";
+
 const els = {
   salary: document.querySelector("#salary"),
   rate: document.querySelector("#rate"),
@@ -466,6 +468,7 @@ if (localStorage.getItem("mes-comptes-theme") === "dark") {
   els.themeToggle.textContent = "☀️";
 }
 
+if (els.sortBy) els.sortBy.value = DEFAULT_SORT;
 render();
 loadCloudState({silent: true});
 
