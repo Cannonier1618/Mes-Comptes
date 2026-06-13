@@ -1,0 +1,122 @@
+
+:root{
+  --bg:#f7f9fc;--panel:#fff;--text:#0e1726;--muted:#667085;--line:#e6eaf0;
+  --nav:#0b1422;--nav2:#111c2d;--blue:#2474ff;--green:#24b05a;--orange:#ff8616;--red:#ff3131;--purple:#8b3dff;
+  --shadow:0 16px 36px rgba(18,33,61,.08);--radius:18px;
+}
+:root.dark{--bg:#0c1220;--panel:#121b2a;--text:#edf4ff;--muted:#98a2b3;--line:#263448;--nav:#070c14;--nav2:#0f1726;--shadow:0 16px 36px rgba(0,0,0,.32)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}
+button,select,input{border:1px solid var(--line);border-radius:13px;background:var(--panel);color:var(--text)}
+button{padding:12px 16px;cursor:pointer}
+button:hover{box-shadow:var(--shadow)}
+.primary{background:#090f1d!important;color:white!important;border-color:#090f1d!important}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.sidebar{background:linear-gradient(180deg,var(--nav),var(--nav2));color:white;padding:22px 20px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:14px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{width:70px;height:70px;border-radius:50%;overflow:hidden;background:white;border:2px solid rgba(255,255,255,.9);box-shadow:0 8px 24px rgba(0,0,0,.25);flex:0 0 auto}
+.logo img{width:100%;height:100%;object-fit:cover}
+.brand h1{margin:0;font-size:22px}
+.nav{display:grid;gap:8px}
+.nav a{color:white;text-decoration:none;display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:10px;opacity:.9}
+.nav a.active{background:linear-gradient(135deg,#1b448a,#1b2d5f);color:#bcd6ff}
+.nav span{width:22px;text-align:center;font-size:20px}
+.watchBox,.themeBox,.moneyBox,.rateBox{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;background:rgba(255,255,255,.035)}
+.watchTop,.watchLine,.themeBox,.rateHead{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.watchTop b{background:white;color:var(--orange);padding:5px 10px;border-radius:9px}
+.watchLine{margin:22px 0;color:rgba(255,255,255,.82)}
+.watchLine strong{color:var(--orange)}
+.watchBox button{width:100%;background:rgba(255,255,255,.10);color:white;border-color:rgba(255,255,255,.10)}
+.moneyBox,.rateBox{display:grid;gap:10px}
+.moneyBox input,.rateBox input{width:100%;padding:11px 12px;background:rgba(255,255,255,.08);color:white;border-color:rgba(255,255,255,.12);font-weight:800}
+.moneyBox small,.rateBox small,.rateHead span{color:rgba(255,255,255,.65);font-size:12px}
+.rateBox small b{color:white}
+.themeBox button{width:44px;height:44px;padding:0;border-radius:50%;background:rgba(255,255,255,.10);color:white;border-color:rgba(255,255,255,.12)}
+
+.sidebarFooter{margin-top:auto;border-top:1px solid rgba(255,255,255,.10);padding-top:14px;color:rgba(255,255,255,.50);font-size:12px;text-align:center}
+.sidebarFooter span{letter-spacing:.02em}
+
+.content{padding:26px 30px 42px;overflow:auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:26px}
+.topbar h2{margin:0;font-size:30px;letter-spacing:-.04em}
+.topbar p{margin:6px 0 0;color:var(--muted)}
+.monthNav,.topActions{display:flex;gap:8px;align-items:center}
+.monthNav button{height:46px;background:white}
+.monthNav .month{min-width:160px;font-weight:800}
+.ghostDanger{color:#a13b3b}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:14px;margin-bottom:26px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow);min-height:150px}
+.cardIcon{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;margin-bottom:12px}
+.cardIcon.green{background:#dff8e8;color:var(--green)}.cardIcon.blue{background:#ddebff;color:var(--blue)}.cardIcon.orange{background:#fff0df;color:var(--orange)}.cardIcon.purple{background:#eadcff;color:var(--purple)}
+.card span{display:block;font-weight:800;font-size:13px;margin-bottom:12px}
+.card strong{display:block;font-size:26px;letter-spacing:-.03em}
+.card small{display:block;margin-top:14px;color:var(--muted)}
+.card small b{color:var(--blue)}
+.miniProgress{height:5px;background:#e7ebf0;border-radius:999px;margin-top:14px;overflow:hidden}
+.miniProgress div{height:100%;background:var(--blue);border-radius:999px;width:0}
+.toolbar{display:grid;grid-template-columns:minmax(240px,1.5fr) .7fr .7fr;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:14px;box-shadow:var(--shadow)}
+.searchBox{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:13px;padding:0 12px;background:var(--panel)}
+.searchBox input{border:0;background:transparent;outline:0;width:100%;padding:13px 0}
+.toolbar select{padding:0 14px}
+.tablePanel{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.tableWrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:980px}
+th,td{padding:15px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:#17233a;font-weight:900;background:var(--panel)}
+:root.dark th{color:var(--text)}
+td input{width:100%;border:0;background:transparent;outline:0;padding:8px;border-radius:8px;color:var(--text)}
+td input:focus{background:#f4f7fb;box-shadow:inset 0 0 0 1px var(--blue)}
+:root.dark td input:focus{background:#0c1220}
+.amount{text-align:right;font-weight:800;color:var(--red);white-space:nowrap}
+.remaining.positive{color:var(--green)}.remaining.negative{color:var(--red)}
+.statusCell{width:38px;text-align:center}
+.cornerMarker{width:12px;height:12px;border-radius:50%;padding:0;background:#d8dde5;border:0;position:relative;display:inline-block;box-shadow:none}
+.cornerMarker.active{background:var(--orange)}
+.cornerMarker .simpleTip{visibility:hidden;opacity:0;position:absolute;left:-8px;top:22px;background:#111827;color:white;padding:7px 10px;border-radius:7px;font-size:12px;white-space:nowrap;z-index:50;transition:.12s}
+.cornerMarker:hover .simpleTip{visibility:visible;opacity:1}
+.rowActions{display:flex;gap:8px;justify-content:flex-end}
+.iconBtn{width:34px;height:34px;padding:0;border:0;background:transparent;font-size:20px;box-shadow:none}
+.iconBtn:hover{background:#f3f6fb}
+#expenseDialog{border:0;border-radius:22px;padding:0;background:transparent}
+#expenseDialog::backdrop{background:rgba(3,7,18,.55);backdrop-filter:blur(4px)}
+.modal{width:min(520px,92vw);background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:var(--shadow);display:grid;gap:16px}
+.modal h2{margin:0 0 6px}
+.modal label{display:grid;gap:7px;color:var(--muted);font-weight:700}
+.modal input{padding:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.checkLine{display:flex!important;grid-template-columns:auto 1fr;align-items:center;gap:10px}
+.checkLine input{width:auto}
+.modalActions{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
+@media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto}.cards{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.content{padding:18px 12px}.cards,.toolbar{grid-template-columns:1fr}.topbar{align-items:stretch;flex-direction:column}.topActions{flex-wrap:wrap}.grid2{grid-template-columns:1fr}}
+
+input[type='hidden']{display:none!important}
+
+.card.savingRounded{
+  border-radius:30px;
+}
+.card.savingRounded .cardIcon{
+  border-radius:18px;
+}
+.readCell{
+  display:inline-block;
+  min-height:24px;
+  padding:6px 0;
+}
+
+/* V9 : tableau de bord épuré */
+.cardsV3{grid-template-columns:repeat(4,minmax(190px,1fr));}
+.card strong{white-space:nowrap;}
+.readCell{pointer-events:none;cursor:default;}
+td:not(.statusCell) .readCell{user-select:text;}
+
+.lineCountValue{
+  font-size:38px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:-.04em;
+  color:white;
+  margin-top:4px;
+}
+table{min-width:920px}

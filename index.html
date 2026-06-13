@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mes comptes — privé</title>
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Mes Comptes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo"><img src="logo-ba.jpg" alt="Logo B.A"></div>
+        <h1>Mes Comptes</h1>
+      </div>
+
+      <nav class="nav">
+        <a class="active" href="#"><span>⌂</span> Tableau de bord</a>
+        <a href="#tableau"><span>☷</span> Dépenses</a>
+      </nav>
+
+      <section class="moneyBox">
+        <div class="rateHead">
+          <strong>Salaire</strong>
+          <span>CHF</span>
+        </div>
+        <label>
+          <input id="salary" type="number" step="0.01" min="0">
+        </label>
+      </section>
+
+      <section class="rateBox">
+        <div class="rateHead">
+          <strong>Taux de change</strong>
+          <span>EUR → CHF</span>
+        </div>
+        <label>
+          <input id="rate" type="number" step="0.0001" min="0">
+        </label>
+        <small>1 EUR = <b id="ratePreview">0.0000</b> CHF</small>
+      </section>
+
+      <div class="themeBox">
+        <span>Thème</span>
+        <button id="themeToggle" title="Changer le thème">🌙</button>
+      </div>
+
+      <div class="sidebarFooter">
+        <span id="lineCount">0 lignes</span>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <h2>Mes Comptes</h2>
+          <p>Charges récurrentes et dépenses personnelles</p>
+        </div>
+        <div class="topActions">
+          <button id="exportCsv">⇧ Exporter CSV</button>
+          <button class="primary" id="addExpense">+ Ajouter une dépense</button>
+        </div>
+      </header>
+
+      <section class="cards cardsV3">
+        <article class="card">
+          <div class="cardIcon green">▣</div>
+          <span>Salaire</span>
+          <strong id="salaryCard">0 CHF</strong>
+          <small>Budget mensuel</small>
+        </article>
+        <article class="card">
+          <div class="cardIcon blue">▤</div>
+          <span>Dépenses totales</span>
+          <strong id="spentCard">0 CHF</strong>
+          <small><b id="budgetPercent">0%</b> du budget</small>
+          <div class="miniProgress"><div id="progressFill"></div></div>
+        </article>
+        <article class="card">
+          <div class="cardIcon green">▢</div>
+          <span>Épargne actuelle</span>
+          <strong id="savingCard">0 CHF</strong>
+          <small>Solde prévisionnel</small>
+        </article>
+        <article class="card rateCard">
+          <div class="cardIcon purple">⇄</div>
+          <span>Taux EUR → CHF</span>
+          <strong id="rateCard">0.0000</strong>
+          <small>Modifiable dans le panneau gauche</small>
+        </article>
+      </section>
+
+      <section class="toolbar">
+        <div class="searchBox">
+          <input id="search" placeholder="Rechercher une dépense...">
+          <span>⌕</span>
+        </div>
+        <input id="currencyFilter" type="hidden" value="all">
+        <select id="sortBy">
+          <option value="entry">Ordre de saisie</option>
+          <option value="date">Trier par date</option>
+          <option value="amountDesc">Montant décroissant</option>
+          <option value="amountAsc">Montant croissant</option>
+        </select>
+      </section>
+
+      <section class="tablePanel" id="tableau">
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Échéance</th>
+                <th>Libellé</th>
+                <th>CHF</th>
+                <th>EUR</th>
+                <th>Conversion CHF</th>
+                <th>Solde restant</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="expenseDialog">
+    <form method="dialog" class="modal">
+      <h2 id="dialogTitle">Ajouter une dépense</h2>
+      <label>Échéance
+        <input id="modalDate" type="number" min="1" max="31" step="1" placeholder="Ex : 05 ou laisser vide">
+      </label>
+      <label>Libellé
+        <input id="modalLabel" placeholder="Ex : Courses">
+      </label>
+      <div class="grid2">
+        <label>Montant CHF
+          <input id="modalChf" type="number" step="0.01" min="0">
+        </label>
+        <label>Montant EUR
+          <input id="modalEur" type="number" step="0.01" min="0">
+        </label>
+      </div>
+      <label class="checkLine">
+        <input id="modalStatus" type="checkbox">
+        <span>À définir</span>
+      </label>
+      <div class="modalActions">
+        <button value="cancel">Annuler</button>
+        <button class="primary" id="saveExpense" value="default">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+    });
+  }
+</script>
+
+</body>
+</html>
