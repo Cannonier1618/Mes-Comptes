@@ -139,7 +139,7 @@ tbody td .readCell{opacity:.92}
 
 
 
-/* V20 — iPhone corrigé : portrait en cartes, paysage en tableau scrollable */
+/* V21 — correction robuste mobile */
 html,
 body {
   max-width: 100%;
@@ -158,7 +158,7 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Mac : tableau normal + lignes fines */
+/* Desktop : tableau classique */
 th,
 td {
   padding-top: 9px;
@@ -173,7 +173,7 @@ tbody tr {
   line-height: 1.25;
 }
 
-/* iPhone portrait : cartes compactes */
+/* Portrait iPhone : vraies cartes lisibles */
 @media (max-width: 760px) and (orientation: portrait) {
   html,
   body {
@@ -184,7 +184,6 @@ tbody tr {
   .app {
     display: block;
     width: 100%;
-    min-height: 100vh;
   }
 
   .sidebar {
@@ -198,7 +197,6 @@ tbody tr {
   .content {
     width: 100%;
     padding: 18px 14px 36px;
-    overflow: visible;
   }
 
   .topbar {
@@ -214,8 +212,8 @@ tbody tr {
   .topActions {
     display: grid;
     grid-template-columns: 1fr;
-    width: 100%;
     gap: 10px;
+    width: 100%;
   }
 
   .topActions button {
@@ -260,14 +258,8 @@ tbody tr {
 
   .tableWrap {
     overflow: visible !important;
-    padding: 0;
     width: 100%;
-  }
-
-  .tableWrap table {
-    min-width: 0 !important;
-    width: 100% !important;
-    table-layout: auto !important;
+    padding: 0;
   }
 
   table,
@@ -278,8 +270,8 @@ tbody tr {
   td {
     display: block;
     width: 100% !important;
-    min-width: 0 !important;
     max-width: 100% !important;
+    min-width: 0 !important;
   }
 
   thead {
@@ -299,13 +291,9 @@ tbody tr {
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: 18px;
-    padding: 12px 12px 10px;
+    padding: 14px 14px 12px;
     box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
     overflow: hidden;
-  }
-
-  html.dark tbody tr {
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.24);
   }
 
   tbody tr:hover td {
@@ -314,9 +302,9 @@ tbody tr {
 
   tbody td {
     border: 0 !important;
-    padding: 3px 0;
+    padding: 0;
     white-space: normal !important;
-    text-align: left;
+    text-align: left !important;
   }
 
   tbody td.emptyMobile {
@@ -326,92 +314,72 @@ tbody tr {
   tbody td.statusCell {
     display: block !important;
     position: absolute;
-    left: 12px;
-    top: 12px;
+    left: 14px;
+    top: 14px;
     width: 14px !important;
-    padding: 0;
+    height: 14px;
   }
 
-  tbody td:nth-child(2) {
-    padding-left: 24px;
+  tbody td[data-label="Échéance"] {
+    padding-left: 26px;
     color: var(--muted);
     font-size: 12px;
     font-weight: 800;
     line-height: 1.2;
-  }
-
-  tbody td:nth-child(3) {
-    padding-left: 24px;
-    font-size: 15px;
-    font-weight: 850;
-    color: var(--text);
-    line-height: 1.25;
     margin-bottom: 8px;
   }
 
-  tbody td:nth-child(4),
-  tbody td:nth-child(5),
-  tbody td:nth-child(6),
-  tbody td:nth-child(7) {
-    display: grid !important;
-    grid-template-columns: 104px minmax(0, 1fr);
+  tbody td[data-label="Libellé"] {
+    padding-left: 26px;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 850;
+    line-height: 1.25;
+    margin-bottom: 14px;
+  }
+
+  tbody td[data-label="CHF"],
+  tbody td[data-label="EUR"],
+  tbody td[data-label="Conversion"],
+  tbody td[data-label="Solde"] {
+    display: flex !important;
+    justify-content: space-between;
     align-items: baseline;
-    gap: 10px;
-    font-size: 13px;
+    gap: 14px;
+    padding: 5px 0;
+    font-size: 14px;
     line-height: 1.25;
   }
 
-  tbody td:nth-child(4)::before {
-    content: "CHF";
-  }
-
-  tbody td:nth-child(5)::before {
-    content: "EUR";
-  }
-
-  tbody td:nth-child(6)::before {
-    content: "Conversion";
-  }
-
-  tbody td:nth-child(7)::before {
-    content: "Solde";
-  }
-
-  tbody td:nth-child(4)::before,
-  tbody td:nth-child(5)::before,
-  tbody td:nth-child(6)::before,
-  tbody td:nth-child(7)::before {
+  tbody td[data-label="CHF"]::before,
+  tbody td[data-label="EUR"]::before,
+  tbody td[data-label="Conversion"]::before,
+  tbody td[data-label="Solde"]::before {
+    content: attr(data-label);
     color: var(--muted);
     font-weight: 750;
+    flex: 0 0 auto;
   }
 
-  tbody td:nth-child(4) .readCell,
-  tbody td:nth-child(5) .readCell {
-    justify-self: end;
+  tbody td[data-label="CHF"] .readCell,
+  tbody td[data-label="EUR"] .readCell {
+    margin-left: auto;
     text-align: right;
     font-weight: 850;
     color: #ef4444;
-    max-width: 100%;
-    overflow-wrap: anywhere;
   }
 
-  tbody td:nth-child(6),
-  tbody td:nth-child(7) {
-    text-align: right;
-    font-weight: 850;
-    overflow-wrap: anywhere;
-  }
-
-  tbody td:nth-child(6) {
+  tbody td[data-label="Conversion"] {
     color: #ef4444;
+    font-weight: 850;
   }
 
-  tbody td:nth-child(7) {
-    color: #16a34a;
+  tbody td[data-label="Solde"] {
+    font-weight: 850;
   }
 
-  tbody td:nth-child(8) {
-    padding-top: 10px;
+  tbody td.actionsCell {
+    margin-top: 10px;
   }
 
   .rowActions {
@@ -452,13 +420,8 @@ tbody tr {
   }
 }
 
-/* iPhone paysage : tableau classique avec scroll horizontal */
+/* Paysage iPhone : tableau avec scroll horizontal */
 @media (max-width: 940px) and (orientation: landscape) {
-  html,
-  body {
-    overflow-x: hidden;
-  }
-
   .app {
     display: block;
   }
@@ -472,16 +435,11 @@ tbody tr {
 
   .content {
     padding: 18px;
-    overflow: visible;
   }
 
   .cards,
   .cardsV3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .tablePanel {
-    overflow: visible;
   }
 
   .tableWrap {
@@ -497,7 +455,6 @@ tbody tr {
     min-width: 980px !important;
     width: 980px !important;
     max-width: none !important;
-    table-layout: auto;
   }
 
   table {
@@ -522,18 +479,5 @@ tbody tr {
     width: auto !important;
     max-width: none !important;
     white-space: nowrap !important;
-  }
-
-  .tableWrap::-webkit-scrollbar {
-    height: 9px;
-  }
-
-  .tableWrap::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .tableWrap::-webkit-scrollbar-thumb {
-    background: rgba(148, 163, 184, 0.55);
-    border-radius: 999px;
   }
 }

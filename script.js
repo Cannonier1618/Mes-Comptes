@@ -347,18 +347,18 @@ function render(){
     const tip = escapeAttr(statusTooltip(e));
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td class="statusCell">
+      <td class="statusCell" data-label="">
         <button class="cornerMarker ${st === "todo" ? "active" : ""}" data-action="cycleStatus" data-index="${e.index}" title="${tip}" aria-label="${tip}">
           ${st === "todo" ? '<span class="simpleTip">À définir</span>' : ""}
         </button>
       </td>
-      <td><span class="readCell">${escapeHtml(formatEcheance(e.date || ""))}</span></td>
-      <td><span class="readCell">${escapeHtml(e.label || "")}</span></td>
-      <td class="${e.chf === "" || e.chf == null ? "emptyMobile" : ""}"><span class="readCell amount">${e.chf === "" || e.chf == null ? "" : escapeHtml(moneyPlainCHF(e.chf))}</span></td>
-      <td class="${e.eur === "" || e.eur == null ? "emptyMobile" : ""}"><span class="readCell amount">${e.eur === "" || e.eur == null ? "" : escapeHtml(moneyPlainEUR(e.eur))}</span></td>
-      <td class="amount ${(e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "emptyMobile" : ""}">${(e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "" : money(converted)}</td>
-      <td class="amount remaining ${running < 0 ? "negative" : "positive"}">${money(running)}</td>
-      <td>
+      <td data-label="Échéance"><span class="readCell">${escapeHtml(formatEcheance(e.date || ""))}</span></td>
+      <td data-label="Libellé"><span class="readCell">${escapeHtml(e.label || "")}</span></td>
+      <td data-label="CHF" class="${e.chf === "" || e.chf == null ? "emptyMobile" : ""}"><span class="readCell amount">${e.chf === "" || e.chf == null ? "" : escapeHtml(moneyPlainCHF(e.chf))}</span></td>
+      <td data-label="EUR" class="${e.eur === "" || e.eur == null ? "emptyMobile" : ""}"><span class="readCell amount">${e.eur === "" || e.eur == null ? "" : escapeHtml(moneyPlainEUR(e.eur))}</span></td>
+      <td data-label="Conversion" class="amount ${(e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "emptyMobile" : ""}">${(e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "" : money(converted)}</td>
+      <td data-label="Solde" class="amount remaining ${running < 0 ? "negative" : "positive"}">${money(running)}</td>
+      <td data-label="" class="actionsCell">
         <div class="rowActions">
           <button class="iconBtn" data-action="edit" data-index="${e.index}" title="Modifier">✎</button>
           <button class="iconBtn" data-action="delete" data-index="${e.index}" title="Supprimer">×</button>

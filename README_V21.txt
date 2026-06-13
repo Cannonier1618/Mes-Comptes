@@ -1,0 +1,1 @@
+V21 : correction robuste du responsive. Le script ajoute des data-label aux cellules, le mobile portrait affiche de vraies cartes lisibles, le paysage garde un tableau scrollable. Supabase est conservé.
