@@ -1,0 +1,1 @@
+V23 : ajout d'un bouton discret sur chaque ligne pour la masquer du calcul. La ligne reste visible en transparence et peut être réintégrée. Le statut est synchronisé via Supabase dans la colonne status, sans nouvelle colonne SQL.

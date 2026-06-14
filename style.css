@@ -481,3 +481,20 @@ tbody tr {
     white-space: nowrap !important;
   }
 }
+
+
+/* V23 — lignes masquables pour simuler l'épargne */
+.hiddenRow td{
+  opacity:.42;
+}
+.hiddenRow td.remaining{
+  opacity:.55;
+}
+.hideBtn{
+  font-size:16px;
+  color:var(--muted);
+}
+.hideBtn.active{
+  color:var(--orange);
+  background:rgba(255,134,22,.12);
+}

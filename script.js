@@ -275,6 +275,27 @@ function amountCHF(expense){
   return Number(expense.chf || 0) + Number(expense.eur || 0) * Number(state.rate || 0);
 }
 
+function statusTokens(status){
+  return new Set(String(status || "").split(/\s+/).filter(Boolean));
+}
+
+function hasStatus(status, token){
+  return statusTokens(status).has(token);
+}
+
+function makeStatus(tokens){
+  const order = ["todo", "hidden"];
+  const set = tokens instanceof Set ? tokens : statusTokens(tokens);
+  return order.filter(token => set.has(token)).join(" ");
+}
+
+function setStatusFlag(status, token, enabled){
+  const tokens = statusTokens(status);
+  if (enabled) tokens.add(token);
+  else tokens.delete(token);
+  return makeStatus(tokens);
+}
+
 function normalizeExpense(expense){
   const e = {...expense};
   e.date = extractDay(e.date || "");
@@ -283,17 +304,29 @@ function normalizeExpense(expense){
     e.status = map[e.color] || "";
   }
   if (["confirmed","estimated","check","pending"].includes(e.status)) e.status = "todo";
+  e.status = makeStatus(e.status);
   delete e.note;
   delete e.color;
   return e;
 }
 
 function safeStatus(status){
-  return status === "todo" ? "todo" : "";
+  return hasStatus(status, "todo") ? "todo" : "";
+}
+
+function isHidden(expense){
+  return hasStatus(expense && expense.status, "hidden");
+}
+
+function activeAmountCHF(expense){
+  return isHidden(expense) ? 0 : amountCHF(expense);
 }
 
 function statusLabel(status){
-  return STATUS_META[safeStatus(status)].label;
+  const labels = [];
+  if (hasStatus(status, "todo")) labels.push("À définir");
+  if (hasStatus(status, "hidden")) labels.push("Masquée");
+  return labels.join(" ") || "";
 }
 
 function statusTooltip(expense){
@@ -325,7 +358,7 @@ function render(){
   if (els.rateCard) els.rateCard.textContent = Number(state.rate || 0).toFixed(4);
   if (els.ratePreview) els.ratePreview.textContent = Number(state.rate || 0).toFixed(4);
 
-  const total = state.expenses.reduce((sum, e) => sum + amountCHF(e), 0);
+  const total = state.expenses.reduce((sum, e) => sum + activeAmountCHF(normalizeExpense(e)), 0);
   const saving = Number(state.salary || 0) - total;
   const percent = Number(state.salary || 0) ? Math.min(100, Math.max(0, total / Number(state.salary) * 100)) : 0;
 
@@ -344,10 +377,12 @@ function render(){
 
   visible.forEach((e) => {
     const converted = Number(e.eur || 0) * Number(state.rate || 0);
-    running -= amountCHF(e);
+    const hidden = isHidden(e);
+    running -= activeAmountCHF(e);
     const st = safeStatus(e.status || "");
     const tip = escapeAttr(statusTooltip(e));
     const tr = document.createElement("tr");
+    if (hidden) tr.classList.add("hiddenRow");
     tr.innerHTML = `
       <td class="statusCell" data-label="">
         <button class="cornerMarker ${st === "todo" ? "active" : ""}" data-action="cycleStatus" data-index="${e.index}" title="${tip}" aria-label="${tip}">
@@ -362,6 +397,7 @@ function render(){
       <td data-label="Solde" class="amount remaining ${running < 0 ? "negative" : "positive"}">${money(running)}</td>
       <td data-label="" class="actionsCell">
         <div class="rowActions">
+          <button class="iconBtn hideBtn ${hidden ? "active" : ""}" data-action="toggleHidden" data-index="${e.index}" title="${hidden ? "Réintégrer dans le calcul" : "Masquer du calcul"}">${hidden ? "◉" : "○"}</button>
           <button class="iconBtn" data-action="edit" data-index="${e.index}" title="Modifier">✎</button>
           <button class="iconBtn" data-action="delete" data-index="${e.index}" title="Supprimer">×</button>
         </div>
@@ -395,12 +431,16 @@ function openModal(index = null){
 }
 
 function saveModal(){
+  const previous = editingIndex === null ? {} : normalizeExpense(state.expenses[editingIndex] || {});
   const item = {
     date: extractDay(els.modalDate.value),
     label: els.modalLabel.value.trim(),
     chf: els.modalChf.value === "" ? "" : Number(els.modalChf.value),
     eur: els.modalEur.value === "" ? "" : Number(els.modalEur.value),
-    status: els.modalStatus.checked ? "todo" : ""
+    status: makeStatus([
+      els.modalStatus.checked ? "todo" : "",
+      isHidden(previous) ? "hidden" : ""
+    ].join(" "))
   };
   if (editingIndex === null) state.expenses.push(item);
   else state.expenses[editingIndex] = item;
@@ -409,8 +449,15 @@ function saveModal(){
 }
 
 function cycleStatus(index){
-  const current = safeStatus(state.expenses[index].status || "");
-  state.expenses[index].status = current === "todo" ? "" : "todo";
+  const current = hasStatus(state.expenses[index].status || "", "todo");
+  state.expenses[index].status = setStatusFlag(state.expenses[index].status || "", "todo", !current);
+  saveState();
+  render();
+}
+
+function toggleHidden(index){
+  const current = isHidden(state.expenses[index]);
+  state.expenses[index].status = setStatusFlag(state.expenses[index].status || "", "hidden", !current);
   saveState();
   render();
 }
@@ -426,6 +473,7 @@ els.rows.addEventListener("click", event => {
   if (!btn) return;
   const index = Number(btn.dataset.index);
   if (btn.dataset.action === "cycleStatus") cycleStatus(index);
+  if (btn.dataset.action === "toggleHidden") toggleHidden(index);
   if (btn.dataset.action === "edit") openModal(index);
   if (btn.dataset.action === "delete") {
     state.expenses.splice(index, 1);
@@ -435,11 +483,11 @@ els.rows.addEventListener("click", event => {
 });
 
 els.exportCsv.addEventListener("click", () => {
-  const header = ["Échéance","Libellé","Montant CHF","Montant EUR","Conversion CHF","Total CHF","À définir"];
+  const header = ["Échéance","Libellé","Montant CHF","Montant EUR","Conversion CHF","Total CHF","À définir","Masquée"];
   const lines = [header];
   state.expenses.forEach((e) => {
     e = normalizeExpense(e);
-    lines.push([formatEcheance(e.date || ""), e.label || "", e.chf || "", e.eur || "", ((e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "" : (Number(e.eur||0)*Number(state.rate||0)).toFixed(2)), amountCHF(e).toFixed(2), safeStatus(e.status || "") === "todo" ? "Oui" : ""]);
+    lines.push([formatEcheance(e.date || ""), e.label || "", e.chf || "", e.eur || "", ((e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "" : (Number(e.eur||0)*Number(state.rate||0)).toFixed(2)), amountCHF(e).toFixed(2), safeStatus(e.status || "") === "todo" ? "Oui" : "", isHidden(e) ? "Oui" : ""]);
   });
   const csv = lines.map(row => row.map(cell => `"${String(cell).replaceAll('"','""')}"`).join(";")).join("\n");
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
