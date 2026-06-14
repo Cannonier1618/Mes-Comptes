@@ -129,7 +129,8 @@ async function loadCloudState({silent = false} = {}) {
         label: row.label || "",
         chf: row.chf === null ? "" : Number(row.chf),
         eur: row.eur === null ? "" : Number(row.eur),
-        status: row.status || ""
+        status: setStatusFlag(row.status || "", "hidden", Boolean(row.hidden)),
+        hidden: Boolean(row.hidden)
       }))
     });
 
@@ -172,6 +173,7 @@ async function saveCloudState() {
         chf: e.chf === "" || e.chf == null ? null : Number(e.chf),
         eur: e.eur === "" || e.eur == null ? null : Number(e.eur),
         status: safeStatus(e.status || ""),
+        hidden: isHidden(e),
         position: index
       };
     });
@@ -275,6 +277,10 @@ function amountCHF(expense){
   return Number(expense.chf || 0) + Number(expense.eur || 0) * Number(state.rate || 0);
 }
 
+function rawAmountCHF(expense){
+  return amountCHF(expense);
+}
+
 function statusTokens(status){
   return new Set(String(status || "").split(/\s+/).filter(Boolean));
 }
@@ -298,6 +304,7 @@ function setStatusFlag(status, token, enabled){
 
 function normalizeExpense(expense){
   const e = {...expense};
+  const hiddenFromColumn = Boolean(e.hidden || e.excluded || e.ignore || false);
   e.date = extractDay(e.date || "");
   if (!Object.prototype.hasOwnProperty.call(e, "status")) {
     const map = {green:"todo", yellow:"todo", orange:"todo", red:"todo", blue:"todo", purple:"todo"};
@@ -305,6 +312,8 @@ function normalizeExpense(expense){
   }
   if (["confirmed","estimated","check","pending"].includes(e.status)) e.status = "todo";
   e.status = makeStatus(e.status);
+  if (hiddenFromColumn) e.status = setStatusFlag(e.status, "hidden", true);
+  delete e.hidden;
   delete e.note;
   delete e.color;
   return e;
@@ -443,7 +452,11 @@ function saveModal(){
     ].join(" "))
   };
   if (editingIndex === null) state.expenses.push(item);
-  else state.expenses[editingIndex] = item;
+  else {
+    const wasHidden = isHidden(state.expenses[editingIndex]);
+    item.status = setStatusFlag(item.status || "", "hidden", wasHidden);
+    state.expenses[editingIndex] = item;
+  }
   saveState();
   render();
 }
@@ -456,6 +469,7 @@ function cycleStatus(index){
 }
 
 function toggleHidden(index){
+  state.expenses[index] = normalizeExpense(state.expenses[index]);
   const current = isHidden(state.expenses[index]);
   state.expenses[index].status = setStatusFlag(state.expenses[index].status || "", "hidden", !current);
   saveState();

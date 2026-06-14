@@ -498,3 +498,24 @@ tbody tr {
   color:var(--orange);
   background:rgba(255,134,22,.12);
 }
+
+
+/* V24 — Lignes masquables sauvegardées Supabase */
+.hiddenExpense {
+  opacity: 0.42;
+}
+
+.hiddenExpense td {
+  background: rgba(148, 163, 184, 0.06);
+}
+
+.hideBtn {
+  font-size: 15px;
+  opacity: 0.62;
+}
+
+.hideBtn.active {
+  opacity: 1;
+  background: rgba(249, 115, 22, 0.14) !important;
+  color: #f97316 !important;
+}
