@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Récupération Mes Comptes</title>
+<body style="font-family:Arial;padding:20px">
+<h2>🔎 Récupération Mes Comptes</h2>
+<p><b>Lecture seule.</b> Rien n'est supprimé ni modifié.</p>
+<div id="r">Recherche…</div>
+<script>
+let r=document.getElementById("r"),a=[];
+for(let i=0;i<localStorage.length;i++){
+ let k=localStorage.key(i);
+ if(k&&/mes-comptes|comptes/i.test(k)){
+  let x=localStorage.getItem(k),n="?";
+  try{let v=JSON.parse(x);n=Array.isArray(v.expenses)?v.expenses.length:"?"}
+  catch(e){}
+  a.push(k+" → "+n+" ligne(s)");
+ }
+}
+r.innerHTML=a.length
+ ? "<h3>"+a.length+" sauvegarde(s) trouvée(s)</h3><pre>"+a.join("\n")+"</pre>"
+ : "<h3>Aucune sauvegarde Mes Comptes trouvée.</h3>";
+</script>
+</body>
+</html>
