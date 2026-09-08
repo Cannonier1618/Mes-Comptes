@@ -145,12 +145,11 @@ async function loadCloudState({silent = false} = {}) {
   }
 }
 
-async function saveCloudState() {
+async function saveSettingsCloud() {
   if (isSavingCloud) return;
+
   isSavingCloud = true;
   try {
-    state = migrateState(state);
-
     const settingsPayload = {
       id: 1,
       salary: Number(state.salary || 0),
@@ -163,11 +162,43 @@ async function saveCloudState() {
       body: JSON.stringify(settingsPayload)
     });
 
-    await supabaseFetch("/expenses?id=gte.0", { method: "DELETE" });
+    cloudReady = true;
+  } catch (error) {
+    console.warn("Sauvegarde des paramètres impossible :", error);
+    cloudReady = false;
+  } finally {
+    isSavingCloud = false;
+  }
+}
 
-    const payload = state.expenses.map((e, index) => {
-      e = normalizeExpense(e);
-      return {
+async function saveExpensesCloud() {
+  if (isSavingCloud) return;
+
+  isSavingCloud = true;
+
+  try {
+    state = migrateState(state);
+
+    const cloudRows = await supabaseFetch(
+      "/expenses?select=*&order=position.asc,id.asc"
+    );
+
+    if (!Array.isArray(cloudRows)) {
+      throw new Error("Réponse expenses invalide.");
+    }
+
+    if (cloudRows.length > 0 && state.expenses.length === 0) {
+      throw new Error(
+        "Protection : état local vide alors que le cloud contient des dépenses."
+      );
+    }
+
+    const localIds = new Set();
+
+    for (let index = 0; index < state.expenses.length; index++) {
+      let e = normalizeExpense(state.expenses[index]);
+
+      const payload = {
         date: e.date || null,
         label: e.label || "",
         chf: e.chf === "" || e.chf == null ? null : Number(e.chf),
@@ -176,26 +207,60 @@ async function saveCloudState() {
         hidden: isHidden(e),
         position: index
       };
-    });
 
-    if (payload.length) {
-      await supabaseFetch("/expenses", {
+      if (e.id != null) {
+        const result = await supabaseFetch(
+          `/expenses?id=eq.${encodeURIComponent(e.id)}`,
+          {
+            method: "PATCH",
+            headers: { Prefer: "return=representation" },
+            body: JSON.stringify(payload)
+          }
+        );
+
+        if (Array.isArray(result) && result.length) {
+          localIds.add(Number(e.id));
+          state.expenses[index].id = Number(e.id);
+          continue;
+        }
+      }
+
+      const created = await supabaseFetch("/expenses", {
         method: "POST",
-        headers: { Prefer: "return=minimal" },
+        headers: { Prefer: "return=representation" },
         body: JSON.stringify(payload)
       });
+
+      if (!Array.isArray(created) || !created.length || created[0].id == null) {
+        throw new Error("Impossible de créer une dépense.");
+      }
+
+      state.expenses[index].id = Number(created[0].id);
+      localIds.add(Number(created[0].id));
     }
 
+    for (const row of cloudRows) {
+      const rowId = Number(row.id);
+
+      if (Number.isFinite(rowId) && !localIds.has(rowId)) {
+        await supabaseFetch(
+          `/expenses?id=eq.${encodeURIComponent(rowId)}`,
+          { method: "DELETE" }
+        );
+      }
+    }
+
+    saveLocalState();
     cloudReady = true;
     lastCloudSignature = cloudSignature();
+
   } catch (error) {
-    console.warn("Sauvegarde Supabase impossible :", error);
+    console.warn("Sauvegarde des dépenses impossible :", error);
     cloudReady = false;
   } finally {
     isSavingCloud = false;
   }
 }
-
 function loadLocalState(){
   try {
     const savedV12 = localStorage.getItem(STORAGE_KEY);
@@ -225,9 +290,15 @@ function saveLocalState(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-function saveState(){
+function saveState(mode = "expenses"){
   saveLocalState();
-  saveCloudState();
+
+  if (mode === "settings") {
+    saveSettingsCloud();
+  } else {
+    saveExpensesCloud();
+  }
+
 }
 
 function money(value){
@@ -476,8 +547,8 @@ function toggleHidden(index){
   render();
 }
 
-els.salary.addEventListener("input", () => { state.salary = Number(els.salary.value || 0); saveState(); render(); });
-els.rate.addEventListener("input", () => { state.rate = Number(els.rate.value || 0); saveState(); render(); });
+els.salary.addEventListener("input", () => { state.salary = Number(els.salary.value || 0); saveState("settings"); render(); });
+els.rate.addEventListener("input", () => { state.rate = Number(els.rate.value || 0); saveState("settings"); render(); });
 [els.search, els.currencyFilter, els.sortBy].filter(Boolean).forEach(el => el.addEventListener("input", render));
 els.addExpense.addEventListener("click", () => openModal());
 els.saveExpense.addEventListener("click", saveModal);
