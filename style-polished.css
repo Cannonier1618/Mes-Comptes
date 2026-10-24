@@ -1431,3 +1431,83 @@ button:focus-visible,input:focus-visible,select:focus-visible {
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after { transition-duration:.01ms !important; animation-duration:.01ms !important; }
 }
+
+
+/* V29 — quelques accents et une table plus compacte */
+.tablePanel { border-radius:13px; }
+table { border-spacing:0; }
+th {
+  padding:10px 11px;
+  font-size:9px;
+  letter-spacing:.065em;
+  border-bottom:1px solid #dfe5e9;
+}
+td {
+  padding:8px 11px;
+  font-size:12px;
+  line-height:1.2;
+}
+tbody tr { height:36px; }
+td[data-label="Échéance"] .readCell {
+  display:inline-block;
+  padding:3px 6px;
+  border-radius:5px;
+  background:#f0f3f5;
+  color:#74808b;
+  font-size:10px;
+  font-weight:650;
+}
+td[data-label="Libellé"] .readCell { color:#34495d; font-weight:650; }
+td[data-label="CHF"] .amount:not(:empty) {
+  display:inline-block;
+  padding:3px 6px;
+  border-radius:5px;
+  background:#fbf1eb;
+  color:#a86343;
+  font-size:11px;
+}
+td[data-label="EUR"] .amount:not(:empty) {
+  display:inline-block;
+  padding:3px 6px;
+  border-radius:5px;
+  background:#edf3f8;
+  color:#58728c;
+  font-size:11px;
+}
+td[data-label="Conversion"]:not(.emptyMobile) {
+  background:#f1f6f0;
+  color:#57765c;
+  font-size:11px;
+  font-weight:650;
+}
+td[data-label="Solde"].positive {
+  color:#4d765d;
+  font-size:11px;
+  font-weight:700;
+}
+td[data-label="Solde"].negative { color:#a95c55; }
+.cornerMarker { width:9px; height:9px; }
+.cornerMarker.active { background:#728ca1; }
+.iconBtn { width:27px; height:27px; font-size:15px; }
+.rowActions { gap:2px; }
+:root.dark td[data-label="Échéance"] .readCell { background:#2b3741; color:#b5c0c9; }
+:root.dark td[data-label="Libellé"] .readCell { color:#dce4ea; }
+:root.dark td[data-label="CHF"] .amount:not(:empty) { background:#3b302b; color:#e1a083; }
+:root.dark td[data-label="EUR"] .amount:not(:empty) { background:#2a3743; color:#a9c4dc; }
+:root.dark td[data-label="Conversion"]:not(.emptyMobile) { background:#29352d; color:#b1c9a9; }
+@media (max-width:760px) {
+  th { padding:8px 9px; }
+  td { padding:3px 0; font-size:11px; }
+  tbody tr { min-height:0; padding:10px 11px; gap:0; }
+  tbody td[data-label="Échéance"] { padding:1px 0 1px 21px; background:transparent; }
+  tbody td[data-label="Libellé"] { padding:5px 0 7px 21px; background:transparent; }
+  tbody td[data-label="CHF"],tbody td[data-label="EUR"],
+  tbody td[data-label="Conversion"],tbody td[data-label="Solde"] {
+    min-height:24px; background:transparent;
+  }
+  tbody td[data-label="CHF"] .amount:not(:empty),tbody td[data-label="EUR"] .amount:not(:empty) {
+    padding:2px 5px;
+  }
+  .rowActions { gap:1px; }
+  .iconBtn { width:30px; height:30px; }
+}
