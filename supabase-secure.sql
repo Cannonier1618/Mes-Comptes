@@ -32,7 +32,15 @@ ALTER TABLE public.settings ENABLE ROW LEVEL SECURITY;
 
 REVOKE ALL ON public.expenses, public.settings FROM anon;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.expenses, public.settings TO authenticated;
-GRANT USAGE, SELECT ON SEQUENCE public.expenses_id_seq TO authenticated;
+
+DO $$
+DECLARE
+  expense_sequence text := pg_get_serial_sequence('public.expenses', 'id');
+BEGIN
+  IF expense_sequence IS NOT NULL THEN
+    EXECUTE format('GRANT USAGE, SELECT ON SEQUENCE %s TO authenticated', expense_sequence);
+  END IF;
+END $$;
 
 DROP POLICY IF EXISTS "owner reads expenses" ON public.expenses;
 DROP POLICY IF EXISTS "owner inserts expenses" ON public.expenses;
