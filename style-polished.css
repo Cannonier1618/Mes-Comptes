@@ -1697,3 +1697,24 @@ td[data-label="Solde"].negative { color:#a95c55; }
   #expenseDialog { width:calc(100vw - 20px); max-width:calc(100vw - 20px); max-height:calc(100vh - 20px); max-height:calc(100dvh - 20px); }
   #expenseDialog > .modal { gap:12px; padding:16px; }
 }
+
+
+/* V37 — Safari : autoriser les champs du formulaire a retrecir dans la grille */
+#expenseDialog > .modal { box-sizing:border-box; min-width:0; }
+#expenseDialog > .modal > * { min-width:0; }
+#expenseDialog .modal label { width:100%; min-width:0; }
+#expenseDialog .modal input {
+  display:block;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+}
+#expenseDialog .grid2 {
+  width:100%;
+  min-width:0;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+@media (max-width:640px) {
+  #expenseDialog .grid2 { grid-template-columns:minmax(0,1fr); }
+}
