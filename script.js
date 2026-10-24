@@ -45,6 +45,11 @@ let editingIndex = null;
 let cloudReady = false;
 let isSavingCloud = false;
 let lastCloudSignature = "";
+let localRevision = 0;
+let localDirty = false;
+let saveTimer = null;
+let syncQueue = Promise.resolve();
+const pendingDeleteIds = new Set();
 
 const DEFAULT_SORT = "date";
 
@@ -108,15 +113,25 @@ function cloudSignature(data = state) {
   });
 }
 
-async function loadCloudState({silent = false} = {}) {
+function canLoadCloud() {
+  return !localDirty &&
+    !isSavingCloud &&
+    !saveTimer &&
+    editingIndex === null &&
+    !(els.dialog && els.dialog.open);
+}
+
+async function loadCloudState({silent = false, force = false} = {}) {
+  if (!force && !canLoadCloud()) return;
+
   try {
     const settings = await supabaseFetch("/settings?select=*&id=eq.1&limit=1");
     const expenses = await supabaseFetch("/expenses?select=*&order=position.asc,id.asc");
 
+    // A completely empty cloud is initialized from the existing local state.
+    // Never reset local data just because one of the two tables is empty.
     if ((!settings || !settings.length) && (!expenses || !expenses.length)) {
       await saveCloudState();
-      cloudReady = true;
-      lastCloudSignature = cloudSignature();
       return;
     }
 
@@ -125,6 +140,7 @@ async function loadCloudState({silent = false} = {}) {
       salary: s.salary ?? state.salary ?? INITIAL_DATA.salary,
       rate: s.rate ?? state.rate ?? INITIAL_DATA.rate,
       expenses: (expenses || []).map(row => ({
+        id: row.id,
         date: row.date || "",
         label: row.label || "",
         chf: row.chf === null ? "" : Number(row.chf),
@@ -137,6 +153,7 @@ async function loadCloudState({silent = false} = {}) {
     saveLocalState();
     lastCloudSignature = cloudSignature();
     cloudReady = true;
+    localDirty = false;
     render();
   } catch (error) {
     console.warn("Synchronisation Supabase impossible :", error);
@@ -145,121 +162,119 @@ async function loadCloudState({silent = false} = {}) {
   }
 }
 
-async function saveSettingsCloud() {
-  if (isSavingCloud) return;
+async function writeSettingsCloud(snapshot) {
+  const settingsPayload = {
+    id: 1,
+    salary: Number(snapshot.salary || 0),
+    rate: Number(snapshot.rate || 0)
+  };
+  await supabaseFetch("/settings", {
+    method: "POST",
+    headers: { Prefer: "resolution=merge-duplicates" },
+    body: JSON.stringify(settingsPayload)
+  });
+}
 
-  isSavingCloud = true;
-  try {
-    const settingsPayload = {
-      id: 1,
-      salary: Number(state.salary || 0),
-      rate: Number(state.rate || 0)
+async function writeExpensesCloud(snapshot) {
+  const expenses = snapshot.expenses || [];
+
+  // Save/update the rows in the local snapshot. Missing local rows are NOT
+  // interpreted as deletions; only explicit user deletions are sent to cloud.
+  for (let index = 0; index < expenses.length; index++) {
+    const e = normalizeExpense(expenses[index]);
+    const payload = {
+      date: e.date || null,
+      label: e.label || "",
+      chf: e.chf === "" || e.chf == null ? null : Number(e.chf),
+      eur: e.eur === "" || e.eur == null ? null : Number(e.eur),
+      status: safeStatus(e.status || ""),
+      hidden: isHidden(e),
+      position: index
     };
 
-    await supabaseFetch("/settings", {
-      method: "POST",
-      headers: { Prefer: "resolution=merge-duplicates" },
-      body: JSON.stringify(settingsPayload)
-    });
+    if (e.id != null) {
+      const result = await supabaseFetch(
+        `/expenses?id=eq.${encodeURIComponent(e.id)}`,
+        {
+          method: "PATCH",
+          headers: { Prefer: "return=representation" },
+          body: JSON.stringify(payload)
+        }
+      );
+      if (Array.isArray(result) && result.length) continue;
+    }
 
+    const created = await supabaseFetch("/expenses", {
+      method: "POST",
+      headers: { Prefer: "return=representation" },
+      body: JSON.stringify(payload)
+    });
+    if (!Array.isArray(created) || !created.length || created[0].id == null) {
+      throw new Error("Impossible de créer une dépense.");
+    }
+    expenses[index].id = Number(created[0].id);
+  }
+
+  for (const id of Array.from(pendingDeleteIds)) {
+    await supabaseFetch(`/expenses?id=eq.${encodeURIComponent(id)}`, {
+      method: "DELETE"
+    });
+    pendingDeleteIds.delete(id);
+  }
+}
+
+async function saveCloudState() {
+  const revisionAtStart = localRevision;
+  const snapshot = structuredClone(state);
+  isSavingCloud = true;
+  try {
+    await writeSettingsCloud(snapshot);
+    await writeExpensesCloud(snapshot);
     cloudReady = true;
+    lastCloudSignature = cloudSignature(snapshot);
+    if (revisionAtStart === localRevision) localDirty = false;
+    saveLocalState();
   } catch (error) {
-    console.warn("Sauvegarde des paramètres impossible :", error);
+    console.warn("Initialisation/sauvegarde Supabase impossible :", error);
     cloudReady = false;
+    localDirty = true;
   } finally {
     isSavingCloud = false;
   }
 }
 
-async function saveExpensesCloud() {
-  if (isSavingCloud) return;
-
+async function saveCloudSnapshot() {
+  const revisionAtStart = localRevision;
+  const snapshot = structuredClone(state);
   isSavingCloud = true;
-
   try {
-    state = migrateState(state);
-
-    const cloudRows = await supabaseFetch(
-      "/expenses?select=*&order=position.asc,id.asc"
-    );
-
-    if (!Array.isArray(cloudRows)) {
-      throw new Error("Réponse expenses invalide.");
-    }
-
-    if (cloudRows.length > 0 && state.expenses.length === 0) {
-      throw new Error(
-        "Protection : état local vide alors que le cloud contient des dépenses."
-      );
-    }
-
-    const localIds = new Set();
-
-    for (let index = 0; index < state.expenses.length; index++) {
-      let e = normalizeExpense(state.expenses[index]);
-
-      const payload = {
-        date: e.date || null,
-        label: e.label || "",
-        chf: e.chf === "" || e.chf == null ? null : Number(e.chf),
-        eur: e.eur === "" || e.eur == null ? null : Number(e.eur),
-        status: safeStatus(e.status || ""),
-        hidden: isHidden(e),
-        position: index
-      };
-
-      if (e.id != null) {
-        const result = await supabaseFetch(
-          `/expenses?id=eq.${encodeURIComponent(e.id)}`,
-          {
-            method: "PATCH",
-            headers: { Prefer: "return=representation" },
-            body: JSON.stringify(payload)
-          }
-        );
-
-        if (Array.isArray(result) && result.length) {
-          localIds.add(Number(e.id));
-          state.expenses[index].id = Number(e.id);
-          continue;
-        }
-      }
-
-      const created = await supabaseFetch("/expenses", {
-        method: "POST",
-        headers: { Prefer: "return=representation" },
-        body: JSON.stringify(payload)
-      });
-
-      if (!Array.isArray(created) || !created.length || created[0].id == null) {
-        throw new Error("Impossible de créer une dépense.");
-      }
-
-      state.expenses[index].id = Number(created[0].id);
-      localIds.add(Number(created[0].id));
-    }
-
-    for (const row of cloudRows) {
-      const rowId = Number(row.id);
-
-      if (Number.isFinite(rowId) && !localIds.has(rowId)) {
-        await supabaseFetch(
-          `/expenses?id=eq.${encodeURIComponent(rowId)}`,
-          { method: "DELETE" }
-        );
-      }
-    }
-
-    saveLocalState();
+    await writeSettingsCloud(snapshot);
+    await writeExpensesCloud(snapshot);
     cloudReady = true;
-    lastCloudSignature = cloudSignature();
-
+    lastCloudSignature = cloudSignature(snapshot);
+    if (revisionAtStart === localRevision) localDirty = false;
+    // Keep generated database IDs in local storage without replacing newer edits.
+    if (revisionAtStart === localRevision) saveLocalState();
   } catch (error) {
-    console.warn("Sauvegarde des dépenses impossible :", error);
+    console.warn("Sauvegarde Supabase impossible :", error);
     cloudReady = false;
+    localDirty = true;
   } finally {
     isSavingCloud = false;
   }
+}
+
+function scheduleCloudSave() {
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    saveTimer = null;
+    syncQueue = syncQueue
+      .then(() => saveCloudSnapshot())
+      .catch(error => {
+        console.warn("File de synchronisation en erreur :", error);
+        localDirty = true;
+      });
+  }, 300);
 }
 function loadLocalState(){
   try {
@@ -287,18 +302,19 @@ function migrateState(data){
 }
 
 function saveLocalState(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (error) {
+    console.error("Sauvegarde locale impossible :", error);
+    alert("La sauvegarde locale a échoué. Vérifie l'espace disponible du navigateur avant de fermer l'application.");
+  }
 }
 
-function saveState(mode = "expenses"){
+function saveState(){
   saveLocalState();
-
-  if (mode === "settings") {
-    saveSettingsCloud();
-  } else {
-    saveExpensesCloud();
-  }
-
+  localRevision++;
+  localDirty = true;
+  scheduleCloudSave();
 }
 
 function money(value){
@@ -561,6 +577,8 @@ els.rows.addEventListener("click", event => {
   if (btn.dataset.action === "toggleHidden") toggleHidden(index);
   if (btn.dataset.action === "edit") openModal(index);
   if (btn.dataset.action === "delete") {
+    const item = state.expenses[index];
+    if (item && item.id != null) pendingDeleteIds.add(Number(item.id));
     state.expenses.splice(index, 1);
     saveState();
     render();
@@ -574,7 +592,11 @@ els.exportCsv.addEventListener("click", () => {
     e = normalizeExpense(e);
     lines.push([formatEcheance(e.date || ""), e.label || "", e.chf || "", e.eur || "", ((e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "" : (Number(e.eur||0)*Number(state.rate||0)).toFixed(2)), amountCHF(e).toFixed(2), safeStatus(e.status || "") === "todo" ? "Oui" : "", isHidden(e) ? "Oui" : ""]);
   });
-  const csv = lines.map(row => row.map(cell => `"${String(cell).replaceAll('"','""')}"`).join(";")).join("\n");
+  const csvSafe = value => {
+    const text = String(value ?? "");
+    return /^[\\s]*[=+@\\-]/.test(text) ? "'" + text : text;
+  };
+  const csv = lines.map(row => row.map(cell => `"${csvSafe(cell).replaceAll('"','""')}"`).join(";")).join("\n");
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -583,7 +605,10 @@ els.exportCsv.addEventListener("click", () => {
 });
 
 if (els.resetData) els.resetData.addEventListener("click", () => {
-  if (confirm("Réinitialiser avec les données du fichier d'origine ?")) {
+  if (confirm("Restaurer les données d'origine ? Cette action remplacera les dépenses actuelles sur les appareils synchronisés.")) {
+    state.expenses.forEach(item => {
+      if (item && item.id != null) pendingDeleteIds.add(Number(item.id));
+    });
     state = migrateState(structuredClone(INITIAL_DATA));
     saveState();
     render();
@@ -606,16 +631,22 @@ render();
 loadCloudState({silent: true});
 
 window.addEventListener("focus", () => {
-  if (!editingIndex && !isSavingCloud) loadCloudState({silent: true});
+  if (canLoadCloud()) loadCloudState({silent: true});
 });
 
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && !isSavingCloud) loadCloudState({silent: true});
+  if (!document.hidden && canLoadCloud()) loadCloudState({silent: true});
 });
 
-// Petite synchronisation automatique quand l'application reste ouverte sur Mac et iPhone.
+// Sync periodically when idle. If a previous save failed, retry local changes first.
 setInterval(() => {
-  if (!document.hidden && !isSavingCloud && !(els.dialog && els.dialog.open)) {
+  if (document.hidden || isSavingCloud || (els.dialog && els.dialog.open)) return;
+  if (localDirty && !saveTimer) {
+    syncQueue = syncQueue.then(() => saveCloudSnapshot()).catch(error => {
+      console.warn("Nouvelle tentative de synchronisation impossible :", error);
+      localDirty = true;
+    });
+  } else if (canLoadCloud()) {
     loadCloudState({silent: true});
   }
 }, 8000);
