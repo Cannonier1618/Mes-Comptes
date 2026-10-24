@@ -543,7 +543,7 @@ function openModal(index = null){
   els.modalLabel.value = e.label || "";
   els.modalChf.value = e.chf || "";
   els.modalEur.value = e.eur || "";
-  els.modalStatus.checked = safeStatus(e.status || "") === "todo";
+
   els.dialog.showModal();
 }
 
@@ -556,7 +556,7 @@ function saveModal(){
     chf: els.modalChf.value === "" ? "" : Number(els.modalChf.value),
     eur: els.modalEur.value === "" ? "" : Number(els.modalEur.value),
     status: makeStatus([
-      els.modalStatus.checked ? "todo" : "",
+      hasStatus(previous.status || "", "todo") ? "todo" : "",
       isHidden(previous) ? "hidden" : ""
     ].join(" "))
   };
