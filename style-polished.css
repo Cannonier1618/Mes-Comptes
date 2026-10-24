@@ -1580,3 +1580,22 @@ td[data-label="Solde"].negative { color:#a95c55; }
   .tablePanel td[data-label="CHF"] .amount:not(:empty),
   .tablePanel td[data-label="EUR"] .amount:not(:empty) { padding:2px 6px; }
 }
+
+
+/* V31 — retirer le contrôle « À définir » de la liste */
+.tablePanel th:first-child,
+.tablePanel td.statusCell { display:none !important; }
+.tablePanel { width:min(100%,918px); }
+.tablePanel table {
+  width:918px;
+  min-width:918px;
+}
+@media (max-width:760px) {
+  .tablePanel { width:100%; }
+  .tablePanel table { width:100% !important; min-width:0 !important; }
+  .tablePanel td.statusCell { display:none !important; }
+  .tablePanel tbody td[data-label="Échéance"] { padding-left:0; }
+  .tablePanel tbody td[data-label="Libellé"] { padding-left:0; }
+  .tablePanel tbody td[data-label="Échéance"] { grid-row:1; }
+  .tablePanel tbody td[data-label="Libellé"] { grid-row:2; }
+}
