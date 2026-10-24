@@ -208,7 +208,7 @@ async function writeSettingsCloud(snapshot) {
   });
 }
 
-async function writeExpensesCloud(snapshot) {
+async function writeExpensesCloud(snapshot, revisionAtStart) {
   const expenses = snapshot.expenses || [];
 
   // Save/update the rows in the local snapshot. Missing local rows are NOT
@@ -246,6 +246,12 @@ async function writeExpensesCloud(snapshot) {
       throw new Error("Impossible de créer une dépense.");
     }
     expenses[index].id = Number(created[0].id);
+    // Persist each newly assigned cloud ID immediately so a later network error
+    // cannot make the next retry create the same expense a second time.
+    if (revisionAtStart === localRevision && state.expenses[index]) {
+      state.expenses[index].id = expenses[index].id;
+      saveLocalState();
+    }
   }
 
   for (const id of Array.from(pendingDeleteIds)) {
@@ -263,7 +269,7 @@ async function saveCloudState() {
   isSavingCloud = true;
   try {
     await writeSettingsCloud(snapshot);
-    await writeExpensesCloud(snapshot);
+    await writeExpensesCloud(snapshot, revisionAtStart);
     cloudReady = true;
     lastCloudSignature = cloudSignature(snapshot);
     if (revisionAtStart === localRevision) {
@@ -286,7 +292,7 @@ async function saveCloudSnapshot() {
   isSavingCloud = true;
   try {
     await writeSettingsCloud(snapshot);
-    await writeExpensesCloud(snapshot);
+    await writeExpensesCloud(snapshot, revisionAtStart);
     cloudReady = true;
     lastCloudSignature = cloudSignature(snapshot);
     // Keep generated database IDs, but never replace edits made during the request.
@@ -569,6 +575,7 @@ function openModal(index = null){
 function saveModal(){
   const previous = editingIndex === null ? {} : normalizeExpense(state.expenses[editingIndex] || {});
   const item = {
+    id: previous.id,
     date: extractDay(els.modalDate.value),
     label: els.modalLabel.value.trim(),
     chf: els.modalChf.value === "" ? "" : Number(els.modalChf.value),
