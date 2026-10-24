@@ -1629,17 +1629,9 @@ td[data-label="Solde"].negative { color:#a95c55; }
 }
 
 
-/* V33 — en-tête fixe et solde restant mieux repéré */
-.tablePanel .tableWrap {
-  max-height: min(72vh, 760px);
-  overflow: auto;
-  overscroll-behavior: contain;
-}
-.tablePanel thead th {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
+/* V34 — solde restant mis en évidence, sans défilement interne */
+.tablePanel .tableWrap { max-height:none; overflow-x:auto; overflow-y:visible; }
+.tablePanel thead th { position:static; }
 .tablePanel th:nth-child(7) { background:#eaf3ec; color:#3f684b; }
 .tablePanel td:nth-child(7) {
   background:#f5f9f5;
@@ -1650,7 +1642,6 @@ td[data-label="Solde"].negative { color:#a95c55; }
 :root.dark .tablePanel td:nth-child(7) { background:#202f27; color:#c0dfc6; }
 @media (max-width:760px) {
   .tablePanel .tableWrap { max-height:none; overflow:visible !important; }
-  .tablePanel thead th { position:static; }
   .tablePanel th:nth-child(7) { background:transparent; color:inherit; }
   .tablePanel td:nth-child(7) { background:transparent; color:#347049; }
   :root.dark .tablePanel th:nth-child(7),:root.dark .tablePanel td:nth-child(7) { background:transparent; color:#b6d6af; }
