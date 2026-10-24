@@ -1599,3 +1599,31 @@ td[data-label="Solde"].negative { color:#a95c55; }
   .tablePanel tbody td[data-label="Échéance"] { grid-row:1; }
   .tablePanel tbody td[data-label="Libellé"] { grid-row:2; }
 }
+
+
+/* V32 — hiérarchie plus lisible dans le tableau */
+.tablePanel th:nth-child(2),.tablePanel td:nth-child(2) { text-align:center; }
+.tablePanel th:nth-child(4),.tablePanel th:nth-child(5),
+.tablePanel th:nth-child(6),.tablePanel th:nth-child(7),
+.tablePanel td:nth-child(4),.tablePanel td:nth-child(5),
+.tablePanel td:nth-child(6),.tablePanel td:nth-child(7) { text-align:right; }
+.tablePanel th:nth-child(8),.tablePanel td:nth-child(8) { text-align:center; }
+.tablePanel th:nth-child(3),.tablePanel td:nth-child(3) { border-right:1px solid #edf0f2; }
+.tablePanel tbody tr:nth-child(even) { background:#fafbfc; }
+.tablePanel tbody tr:hover { background:#f0f4f7; }
+.tablePanel tbody tr:hover td { background:transparent; }
+.tablePanel td[data-label="Conversion"]:not(.emptyMobile) {
+  background:transparent;
+  color:#507251;
+  font-weight:700;
+}
+.tablePanel td[data-label="Solde"].positive { color:#347049; font-weight:750; }
+:root.dark .tablePanel th:nth-child(3),:root.dark .tablePanel td:nth-child(3) { border-right-color:#34414c; }
+:root.dark .tablePanel tbody tr:nth-child(even) { background:#1d2932; }
+:root.dark .tablePanel tbody tr:hover { background:#263540; }
+:root.dark .tablePanel td[data-label="Conversion"]:not(.emptyMobile) { background:transparent; color:#b6d6af; }
+@media (max-width:760px) {
+  .tablePanel th:nth-child(3),.tablePanel td:nth-child(3) { border-right:0; }
+  .tablePanel tbody tr:nth-child(even),.tablePanel tbody tr:hover { background:#fff !important; }
+  :root.dark .tablePanel tbody tr:nth-child(even),:root.dark .tablePanel tbody tr:hover { background:#1b252e !important; }
+}
