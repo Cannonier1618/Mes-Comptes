@@ -1,9 +1,10 @@
-const CACHE_NAME = "mes-comptes-pwa-v1";
+const CACHE_NAME = "mes-comptes-pwa-v2";
 const ASSETS = [
   "./",
   "./index.html",
   "./style.css",
   "./script.js",
+  "./auth-gate.js",
   "./manifest.webmanifest",
   "./logo-ba.jpg",
   "./favicon.png",
