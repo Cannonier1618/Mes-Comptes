@@ -139,6 +139,19 @@ async function loadCloudState({silent = false, force = false} = {}) {
       return;
     }
 
+    // If settings exist but the expenses table unexpectedly comes back empty,
+    // preserve local expenses rather than replacing them with an empty list.
+    if ((!expenses || !expenses.length) && state.expenses.length > 0) {
+      const cloudSettings = settings && settings[0] ? settings[0] : {};
+      state.salary = cloudSettings.salary ?? state.salary ?? INITIAL_DATA.salary;
+      state.rate = cloudSettings.rate ?? state.rate ?? INITIAL_DATA.rate;
+      localDirty = true;
+      localRevision++;
+      saveLocalState();
+      await saveCloudSnapshot();
+      return;
+    }
+
     const s = settings && settings[0] ? settings[0] : {};
     state = migrateState({
       salary: s.salary ?? state.salary ?? INITIAL_DATA.salary,
