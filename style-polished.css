@@ -1646,3 +1646,30 @@ td[data-label="Solde"].negative { color:#a95c55; }
   .tablePanel td:nth-child(7) { background:transparent; color:#347049; }
   :root.dark .tablePanel th:nth-child(7),:root.dark .tablePanel td:nth-child(7) { background:transparent; color:#b6d6af; }
 }
+
+
+/* V35 — conserver la ligne cliquée en surbrillance */
+.tablePanel tbody tr.is-selected {
+  background:#eaf2f8 !important;
+  box-shadow:inset 3px 0 0 #64819a;
+}
+.tablePanel tbody tr.is-selected td:nth-child(7) {
+  background:transparent;
+}
+:root.dark .tablePanel tbody tr.is-selected {
+  background:#283744 !important;
+  box-shadow:inset 3px 0 0 #9cb6cb;
+}
+:root.dark .tablePanel tbody tr.is-selected td:nth-child(7) {
+  background:transparent;
+}
+@media (max-width:760px) {
+  .tablePanel tbody tr.is-selected {
+    background:#eaf2f8 !important;
+    box-shadow:inset 3px 0 0 #64819a, 0 2px 7px rgba(27,39,51,.04);
+  }
+  :root.dark .tablePanel tbody tr.is-selected {
+    background:#283744 !important;
+    box-shadow:inset 3px 0 0 #9cb6cb, 0 2px 7px rgba(0,0,0,.14);
+  }
+}
