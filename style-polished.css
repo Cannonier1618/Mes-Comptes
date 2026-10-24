@@ -1673,3 +1673,27 @@ td[data-label="Solde"].negative { color:#a95c55; }
     box-shadow:inset 3px 0 0 #9cb6cb, 0 2px 7px rgba(0,0,0,.14);
   }
 }
+
+
+/* V36 — fenetre de modification adaptee a la taille de l’ecran */
+#expenseDialog {
+  width:min(520px, calc(100vw - 24px));
+  max-width:calc(100vw - 24px);
+  max-height:calc(100vh - 24px);
+  max-height:calc(100dvh - 24px);
+  padding:0;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+#expenseDialog > .modal {
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  gap:14px;
+  padding:22px;
+}
+@media (max-width:640px) {
+  #expenseDialog { width:calc(100vw - 20px); max-width:calc(100vw - 20px); max-height:calc(100vh - 20px); max-height:calc(100dvh - 20px); }
+  #expenseDialog > .modal { gap:12px; padding:16px; }
+}
