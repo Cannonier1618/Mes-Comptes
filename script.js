@@ -123,10 +123,14 @@ function canLoadCloud() {
 
 async function loadCloudState({silent = false, force = false} = {}) {
   if (!force && !canLoadCloud()) return;
+  const revisionAtStart = localRevision;
 
   try {
     const settings = await supabaseFetch("/settings?select=*&id=eq.1&limit=1");
     const expenses = await supabaseFetch("/expenses?select=*&order=position.asc,id.asc");
+
+    // Do not apply a stale read if the user edited the app while the request was in flight.
+    if (revisionAtStart !== localRevision || localDirty) return;
 
     // A completely empty cloud is initialized from the existing local state.
     // Never reset local data just because one of the two tables is empty.
@@ -232,8 +236,11 @@ async function saveCloudState() {
     await writeExpensesCloud(snapshot);
     cloudReady = true;
     lastCloudSignature = cloudSignature(snapshot);
-    if (revisionAtStart === localRevision) localDirty = false;
-    saveLocalState();
+    if (revisionAtStart === localRevision) {
+      state = snapshot;
+      localDirty = false;
+      saveLocalState();
+    }
   } catch (error) {
     console.warn("Initialisation/sauvegarde Supabase impossible :", error);
     cloudReady = false;
@@ -252,9 +259,12 @@ async function saveCloudSnapshot() {
     await writeExpensesCloud(snapshot);
     cloudReady = true;
     lastCloudSignature = cloudSignature(snapshot);
-    if (revisionAtStart === localRevision) localDirty = false;
-    // Keep generated database IDs in local storage without replacing newer edits.
-    if (revisionAtStart === localRevision) saveLocalState();
+    // Keep generated database IDs, but never replace edits made during the request.
+    if (revisionAtStart === localRevision) {
+      state = snapshot;
+      localDirty = false;
+      saveLocalState();
+    }
   } catch (error) {
     console.warn("Sauvegarde Supabase impossible :", error);
     cloudReady = false;
