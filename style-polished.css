@@ -908,3 +908,158 @@ tbody tr:hover td {
     animation-duration: .01ms !important;
   }
 }
+
+
+/* V27 — nouvelle identité visuelle : sauge, ivoire et terracotta */
+:root {
+  --bg: #f4f0e8;
+  --panel: #fffdf8;
+  --text: #20352f;
+  --muted: #718078;
+  --line: #e4e4d8;
+  --nav: #153d34;
+  --nav2: #1b5144;
+  --blue: #527d6c;
+  --green: #23845e;
+  --orange: #c77948;
+  --red: #bb6656;
+  --purple: #81739a;
+  --shadow: 0 12px 30px rgba(36, 54, 45, .08);
+}
+body {
+  background:
+    radial-gradient(ellipse at 92% 4%, rgba(199,121,72,.09), transparent 30rem),
+    #f4f0e8;
+  color: #20352f;
+  font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+}
+.app { grid-template-columns: 276px minmax(0,1fr); }
+.sidebar {
+  background: linear-gradient(155deg,#12382f 0%,#1d5143 58%,#286653 100%);
+  padding: 28px 20px 22px;
+  gap: 20px;
+  box-shadow: 10px 0 34px rgba(20,56,46,.16);
+}
+.brand { border-bottom-color: rgba(255,255,255,.16); padding-bottom: 20px; }
+.brand h1 { font-size: 21px; letter-spacing: -.045em; }
+.logo { border: 3px solid rgba(247,239,220,.92); box-shadow: 0 8px 18px rgba(0,0,0,.24); }
+.moneyBox,.rateBox {
+  background: rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 20px;
+  padding: 18px;
+}
+.moneyBox input,.rateBox input {
+  background: rgba(255,255,255,.13);
+  border-color: rgba(255,255,255,.18);
+  border-radius: 13px;
+}
+.themeBox {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.15);
+}
+.sidebarFooter { color: rgba(255,255,255,.68); }
+.content { padding: 40px clamp(24px,3.5vw,54px) 56px; }
+.topbar { align-items: center; padding-bottom: 24px; border-bottom: 1px solid #dfded3; }
+.topbar > div:first-child::before {
+  content: "VOTRE BUDGET, EN UN COUP D’ŒIL";
+  display: block;
+  color: #9b6a4d;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .16em;
+  margin-bottom: 9px;
+}
+.topbar h2 { font-size: clamp(32px,3vw,43px); color: #173f35; letter-spacing: -.06em; }
+.topbar p { color: #718078; font-size: 14px; }
+.topActions button {
+  border-radius: 999px;
+  min-height: 46px;
+  padding-inline: 17px;
+  background: #fffdf8;
+  border-color: #e0ded2;
+  color: #34544a;
+}
+.topActions .primary,.primary {
+  background: #c77948 !important;
+  border-color: #c77948 !important;
+  color: white !important;
+  box-shadow: 0 8px 18px rgba(199,121,72,.25);
+}
+.cards,.cardsV3 { gap: 16px; margin: 25px 0 22px; }
+.card {
+  min-height: 168px;
+  padding: 21px;
+  border: 1px solid #e7e2d6;
+  border-radius: 22px;
+  box-shadow: 0 8px 22px rgba(36,54,45,.06);
+}
+.card:nth-child(1) { background: linear-gradient(145deg,#fffdf8,#edf4e9); }
+.card:nth-child(2) { background: linear-gradient(145deg,#fffdf8,#f2eee1); }
+.card:nth-child(3) { background: linear-gradient(145deg,#fffdf8,#e9f2ec); }
+.card:nth-child(4) { background: linear-gradient(145deg,#fffdf8,#f0eaf2); }
+.cardIcon { border-radius: 14px; width: 42px; height: 42px; }
+.cardIcon.green { background: #dcecdf; color: #287452; }
+.cardIcon.blue { background: #e5eadc; color: #547b62; }
+.cardIcon.purple { background: #e9e1eb; color: #766187; }
+.card span { color: #6b7d73; text-transform: uppercase; letter-spacing: .08em; font-size: 10px; }
+.card strong { color: #173f35; font-size: clamp(23px,2vw,29px); }
+.card small { color: #75837a; }
+.card small b { color: #a6633e; }
+.miniProgress { background: #e2e6d9; height: 7px; }
+.miniProgress div { background: linear-gradient(90deg,#72a27e,#287452); }
+.toolbar {
+  background: rgba(255,253,248,.72);
+  border: 1px solid #e6e1d6;
+  border-radius: 18px;
+  box-shadow: 0 5px 16px rgba(36,54,45,.04);
+  padding: 11px;
+}
+.searchBox { border-radius: 13px; background: #fffdf8; border-color: #e5e1d8; }
+.searchBox input { color: #20352f; }
+.toolbar select { border-radius: 13px; background: #fffdf8; color: #34544a; }
+.tablePanel {
+  border: 1px solid #e3dfd4;
+  border-radius: 20px;
+  box-shadow: 0 12px 28px rgba(36,54,45,.07);
+}
+th {
+  color: #fffaf0;
+  background: #285746;
+  font-size: 10px;
+  letter-spacing: .11em;
+  padding: 15px 13px;
+}
+td { padding-top: 13px; padding-bottom: 13px; border-bottom-color: #eeeae1; }
+tbody tr:nth-child(even) { background: #faf8f1; }
+tbody tr:hover { background: #edf4e9; }
+.amount { color: #b66253; }
+.remaining.positive { color: #287452; }
+.cornerMarker { background: #d9ded2; }
+.cornerMarker.active { background: #c77948; }
+.iconBtn { color: #65786d; border-radius: 10px; }
+.iconBtn:hover { background: #e8eee5; color: #173f35; }
+button,input,select { border-radius: 13px; }
+:root.dark {
+  --bg:#111b18; --panel:#1a2722; --text:#edf3eb; --muted:#a7b5aa; --line:#34463e;
+  --nav:#102c25; --nav2:#1b4539; --blue:#9bc3a5; --green:#68c496; --red:#e18c7a;
+}
+:root.dark body { background: radial-gradient(ellipse at 92% 4%,rgba(199,121,72,.08),transparent 30rem),#111b18; color:#edf3eb; }
+:root.dark .topbar { border-bottom-color:#34463e; }
+:root.dark .topbar h2,:root.dark .card strong { color:#edf3eb; }
+:root.dark .topActions button,:root.dark .toolbar,:root.dark .searchBox,:root.dark .toolbar select { background:#1a2722; border-color:#34463e; color:#edf3eb; }
+:root.dark .card,:root.dark .card:nth-child(n) { background:linear-gradient(145deg,#1a2b24,#202e28); border-color:#34463e; }
+:root.dark th { background:#24523f; color:#f2f5eb; }
+:root.dark tbody tr:nth-child(even) { background:#1d2b25; }
+:root.dark tbody tr:hover { background:#263a30; }
+@media (max-width:760px) {
+  .sidebar { grid-template-columns:repeat(2,minmax(0,1fr)); padding:16px; gap:10px; }
+  .content { padding:23px 14px 36px; }
+  .topbar { border-bottom:0; padding-bottom:0; }
+  .topbar h2 { font-size:31px; }
+  .cards,.cardsV3 { margin-top:12px; }
+  .card { min-height:0; }
+  .topActions { grid-template-columns:1fr 1fr; }
+  .topActions button { border-radius:14px; }
+  .tablePanel { border-radius:17px; }
+}
