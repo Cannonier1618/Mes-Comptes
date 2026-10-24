@@ -1511,3 +1511,72 @@ td[data-label="Solde"].negative { color:#a95c55; }
   .rowActions { gap:1px; }
   .iconBtn { width:30px; height:30px; }
 }
+
+
+/* V30 — colonnes resserrées, repères colorés visibles */
+.tablePanel {
+  width:min(100%,960px);
+  max-width:100%;
+  overflow:hidden;
+}
+.tableWrap { width:100%; overflow-x:auto; }
+.tablePanel table {
+  width:960px;
+  min-width:960px;
+  max-width:none;
+  table-layout:fixed;
+}
+.tablePanel th:nth-child(1),.tablePanel td:nth-child(1) { width:42px; }
+.tablePanel th:nth-child(2),.tablePanel td:nth-child(2) { width:90px; }
+.tablePanel th:nth-child(3),.tablePanel td:nth-child(3) { width:215px; }
+.tablePanel th:nth-child(4),.tablePanel td:nth-child(4) { width:105px; }
+.tablePanel th:nth-child(5),.tablePanel td:nth-child(5) { width:105px; }
+.tablePanel th:nth-child(6),.tablePanel td:nth-child(6) { width:130px; }
+.tablePanel th:nth-child(7),.tablePanel td:nth-child(7) { width:155px; }
+.tablePanel th:nth-child(8),.tablePanel td:nth-child(8) { width:118px; }
+.tablePanel th {
+  background:#586f84;
+  border-bottom:2px solid #40576c;
+  color:#fff;
+  padding:10px 9px;
+}
+.tablePanel td { padding:7px 9px; }
+.tablePanel td[data-label="CHF"] .amount:not(:empty) {
+  padding:4px 7px;
+  border-radius:6px;
+  background:#f2cdbb;
+  color:#75432d;
+}
+.tablePanel td[data-label="EUR"] .amount:not(:empty) {
+  padding:4px 7px;
+  border-radius:6px;
+  background:#d5e4f2;
+  color:#304f6a;
+}
+.tablePanel td[data-label="Conversion"]:not(.emptyMobile) {
+  background:#e6f0e2;
+  color:#365f3c;
+  font-weight:750;
+}
+.tablePanel td[data-label="Solde"].positive {
+  color:#347049;
+  font-weight:750;
+}
+.tablePanel td[data-label="Solde"].negative { color:#a34e46; }
+:root.dark .tablePanel th { background:#394e60; border-bottom-color:#2f4353; color:#eef3f6; }
+:root.dark .tablePanel td[data-label="CHF"] .amount:not(:empty) { background:#563e34; color:#ffd1b9; }
+:root.dark .tablePanel td[data-label="EUR"] .amount:not(:empty) { background:#31485b; color:#c5def2; }
+:root.dark .tablePanel td[data-label="Conversion"]:not(.emptyMobile) { background:#314438; color:#c5e1bf; }
+@media (max-width:760px) {
+  .tablePanel { width:100%; }
+  .tablePanel table {
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    table-layout:auto;
+  }
+  .tablePanel th,.tablePanel td { width:100% !important; }
+  .tablePanel tbody td[data-label="Conversion"]:not(.emptyMobile) { background:transparent; }
+  .tablePanel td[data-label="CHF"] .amount:not(:empty),
+  .tablePanel td[data-label="EUR"] .amount:not(:empty) { padding:2px 6px; }
+}
