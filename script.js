@@ -49,7 +49,23 @@ let localRevision = 0;
 let localDirty = false;
 let saveTimer = null;
 let syncQueue = Promise.resolve();
-const pendingDeleteIds = new Set();
+const PENDING_DELETES_KEY = "mes-comptes-pending-deletes-v1";
+function loadPendingDeleteIds() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PENDING_DELETES_KEY) || "[]");
+    return Array.isArray(saved) ? saved.map(Number).filter(Number.isFinite) : [];
+  } catch {
+    return [];
+  }
+}
+const pendingDeleteIds = new Set(loadPendingDeleteIds());
+function persistPendingDeleteIds() {
+  try {
+    localStorage.setItem(PENDING_DELETES_KEY, JSON.stringify(Array.from(pendingDeleteIds)));
+  } catch (error) {
+    console.error("Impossible de mémoriser les suppressions en attente :", error);
+  }
+}
 
 const DEFAULT_SORT = "date";
 
@@ -237,6 +253,7 @@ async function writeExpensesCloud(snapshot) {
       method: "DELETE"
     });
     pendingDeleteIds.delete(id);
+    persistPendingDeleteIds();
   }
 }
 
@@ -601,7 +618,7 @@ els.rows.addEventListener("click", event => {
   if (btn.dataset.action === "edit") openModal(index);
   if (btn.dataset.action === "delete") {
     const item = state.expenses[index];
-    if (item && item.id != null) pendingDeleteIds.add(Number(item.id));
+    if (item && item.id != null) { pendingDeleteIds.add(Number(item.id)); persistPendingDeleteIds(); }
     state.expenses.splice(index, 1);
     saveState();
     render();
@@ -617,7 +634,7 @@ els.exportCsv.addEventListener("click", () => {
   });
   const csvSafe = value => {
     const text = String(value ?? "");
-    return /^[\\s]*[=+@\\-]/.test(text) ? "'" + text : text;
+    return /^\s*[=+@\-]/.test(text) ? "'" + text : text;
   };
   const csv = lines.map(row => row.map(cell => `"${csvSafe(cell).replaceAll('"','""')}"`).join(";")).join("\n");
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
