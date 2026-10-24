@@ -519,3 +519,392 @@ tbody tr {
   background: rgba(249, 115, 22, 0.14) !important;
   color: #f97316 !important;
 }
+
+
+/* V26 — finition visuelle douce et cohérente */
+:root {
+  --bg: #f3f6fb;
+  --panel: #ffffff;
+  --text: #162238;
+  --muted: #718096;
+  --line: #e6ebf2;
+  --nav: #101a2c;
+  --nav2: #1c2c48;
+  --blue: #426ff5;
+  --green: #15966a;
+  --orange: #e7973b;
+  --red: #c75d67;
+  --purple: #7c69d9;
+  --shadow: 0 10px 28px rgba(22, 38, 67, .055);
+  --radius: 20px;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 84% 0%, rgba(66, 111, 245, .055), transparent 34rem),
+    var(--bg);
+  color: var(--text);
+  letter-spacing: -.01em;
+}
+
+button, input, select {
+  border-radius: 12px;
+  transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+button:hover {
+  box-shadow: 0 6px 18px rgba(22, 38, 67, .09);
+  transform: translateY(-1px);
+}
+
+button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid rgba(66, 111, 245, .24);
+  outline-offset: 2px;
+}
+
+.app {
+  grid-template-columns: 260px minmax(0, 1fr);
+}
+
+.sidebar {
+  background: linear-gradient(165deg, #111b2d 0%, #17243a 52%, #213454 100%);
+  padding: 24px 18px;
+  gap: 16px;
+  box-shadow: 8px 0 30px rgba(14, 24, 41, .08);
+}
+
+.brand {
+  gap: 12px;
+  padding: 2px 2px 18px;
+}
+
+.logo {
+  width: 56px;
+  height: 56px;
+  border-width: 1px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .2);
+}
+
+.brand h1 {
+  font-size: 20px;
+  letter-spacing: -.035em;
+}
+
+.moneyBox, .rateBox {
+  border-color: rgba(255,255,255,.1);
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255,255,255,.055);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+.rateHead strong {
+  font-size: 14px;
+  letter-spacing: -.01em;
+}
+
+.moneyBox input, .rateBox input {
+  min-height: 44px;
+  border-radius: 11px;
+  font-size: 16px;
+  background: rgba(255,255,255,.09);
+}
+
+.themeBox {
+  border-color: rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+
+.themeBox button {
+  width: 38px;
+  height: 38px;
+}
+
+.sidebarFooter {
+  padding-top: 16px;
+}
+
+.content {
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 36px clamp(22px, 3vw, 48px) 52px;
+}
+
+.topbar {
+  margin-bottom: 24px;
+}
+
+.topbar h2 {
+  font-size: clamp(28px, 2.4vw, 36px);
+  letter-spacing: -.045em;
+}
+
+.topbar p {
+  font-size: 14px;
+}
+
+.topActions {
+  gap: 9px;
+}
+
+.topActions button, .toolbar select {
+  min-height: 44px;
+  padding: 0 15px;
+  border-color: var(--line);
+  background: var(--panel);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.topActions .primary, .primary {
+  background: linear-gradient(135deg, #4778fa, #3565e8) !important;
+  border-color: transparent !important;
+  box-shadow: 0 7px 16px rgba(66, 111, 245, .2);
+}
+
+.cards, .cardsV3 {
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.card {
+  min-height: 158px;
+  padding: 19px 20px;
+  border-radius: 20px;
+  border-color: rgba(222, 229, 239, .9);
+  box-shadow: 0 8px 24px rgba(22, 38, 67, .045);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(22, 38, 67, .085);
+}
+
+.cardIcon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 13px;
+  border-radius: 13px;
+}
+
+.cardIcon.green { background: #e5f6ed; color: #14885f; }
+.cardIcon.blue { background: #e9efff; color: #426ff5; }
+.cardIcon.orange { background: #fff1df; color: #d37b20; }
+.cardIcon.purple { background: #f0edff; color: #7c69d9; }
+
+.card span {
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .015em;
+  margin-bottom: 8px;
+}
+
+.card strong {
+  font-size: clamp(22px, 1.8vw, 27px);
+  letter-spacing: -.045em;
+}
+
+.card small {
+  margin-top: 9px;
+  font-size: 12px;
+}
+
+.card small b {
+  color: var(--blue);
+}
+
+.miniProgress {
+  height: 6px;
+  margin-top: 12px;
+  background: #edf1f7;
+}
+
+.miniProgress div {
+  background: linear-gradient(90deg, #6e91ff, #426ff5);
+}
+
+.toolbar {
+  grid-template-columns: minmax(0, 1fr) minmax(185px, 230px);
+  gap: 10px;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 16px;
+  box-shadow: none;
+}
+
+.searchBox {
+  min-height: 44px;
+  border-radius: 11px;
+  padding: 0 13px;
+}
+
+.searchBox input {
+  font-size: 13px;
+}
+
+.toolbar select {
+  width: 100%;
+  border-radius: 11px;
+}
+
+.tablePanel {
+  border-color: rgba(222, 229, 239, .9);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(22, 38, 67, .045);
+}
+
+th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: #6e7b90;
+  background: #f8faff;
+  letter-spacing: .055em;
+  font-size: 10px;
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+
+td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+tbody tr {
+  transition: background-color .15s ease;
+}
+
+tbody tr:hover {
+  background: #f9fbff;
+}
+
+tbody tr:hover td {
+  background: transparent;
+}
+
+.amount {
+  color: #a95a63;
+  font-weight: 700;
+}
+
+.remaining.positive {
+  color: #13855e;
+}
+
+.statusCell .cornerMarker {
+  background: #dce3ed;
+}
+
+.statusCell .cornerMarker.active {
+  background: var(--orange);
+}
+
+.iconBtn:hover {
+  background: #eff3fa;
+  box-shadow: none;
+  transform: none;
+}
+
+#expenseDialog::backdrop {
+  background: rgba(12, 20, 35, .48);
+  backdrop-filter: blur(5px);
+}
+
+.modal {
+  border-radius: 20px;
+}
+
+:root.dark {
+  --bg: #0d1421;
+  --panel: #151f30;
+  --text: #edf2fb;
+  --muted: #a2aec0;
+  --line: #27364d;
+  --blue: #7a9aff;
+  --green: #58c997;
+  --red: #e17b84;
+  --shadow: 0 12px 30px rgba(0,0,0,.25);
+}
+
+:root.dark body {
+  background:
+    radial-gradient(ellipse at 84% 0%, rgba(87, 119, 220, .11), transparent 34rem),
+    var(--bg);
+}
+
+:root.dark th {
+  color: #aab7cc;
+  background: #182437;
+}
+
+:root.dark tbody tr:hover {
+  background: #19263a;
+}
+
+:root.dark .miniProgress {
+  background: #27364d;
+}
+
+:root.dark .cardIcon.green { background: rgba(53, 169, 118, .15); color: #64d4a2; }
+:root.dark .cardIcon.blue { background: rgba(84, 122, 235, .18); color: #91aaff; }
+:root.dark .cardIcon.orange { background: rgba(220, 145, 54, .16); color: #f1b66c; }
+:root.dark .cardIcon.purple { background: rgba(126, 104, 218, .18); color: #b2a2ff; }
+
+@media (max-width: 1100px) {
+  .app { grid-template-columns: 230px minmax(0, 1fr); }
+  .sidebar { padding: 20px 15px; }
+  .content { padding: 28px 20px 40px; }
+  .cards, .cardsV3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .topbar { align-items: flex-start; }
+  .topActions { flex-wrap: wrap; justify-content: flex-end; }
+}
+
+@media (max-width: 760px) {
+  .app { display: block; }
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    border-radius: 0 0 24px 24px;
+    padding: 15px 16px 13px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .brand, .themeBox, .sidebarFooter { grid-column: 1 / -1; }
+  .brand { padding: 0 0 10px; }
+  .logo { width: 48px; height: 48px; }
+  .moneyBox, .rateBox { padding: 12px; gap: 8px; }
+  .moneyBox input, .rateBox input { min-height: 40px; padding: 9px 10px; }
+  .rateHead { align-items: flex-start; flex-direction: column; gap: 3px; }
+  .rateHead span { font-size: 10px; }
+  .themeBox { padding: 8px 11px; }
+  .sidebarFooter { margin-top: 0; padding-top: 8px; }
+  .content { padding: 22px 14px 34px; }
+  .topbar { display: flex; flex-direction: column; gap: 14px; margin-bottom: 18px; }
+  .topbar h2 { font-size: 28px; }
+  .topActions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .topActions button { width: 100%; min-height: 42px; padding: 0 10px; font-size: 12px; }
+  .topActions #addExpense { grid-column: 1 / -1; order: -1; }
+  .cards, .cardsV3 { grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
+  .card { min-height: 0; padding: 15px 16px; border-radius: 17px; }
+  .cardIcon { width: 36px; height: 36px; margin-bottom: 10px; }
+  .card strong { font-size: 23px; }
+  .card small { margin-top: 7px; }
+  .toolbar { grid-template-columns: 1fr; padding: 9px; gap: 8px; }
+  .toolbar select { min-height: 42px; }
+  tbody tr { border-radius: 16px; }
+  .tablePanel { border-radius: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
