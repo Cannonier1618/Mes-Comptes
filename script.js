@@ -1,33 +1,8 @@
 const INITIAL_DATA = {
-  "salary": 4240,
-  "rate": 0.9192,
-  "expenses": [
-    {"date": "2026-06-06", "label": "Loyer", "chf": 1690, "eur": ""},
-    {"date": "2026-06-19", "label": "Netflix", "chf": "", "eur": 21.99},
-    {"date": "2026-06-12", "label": "Prime Vidéo", "chf": "", "eur": 6.99},
-    {"date": "2026-06-10", "label": "Disney+", "chf": "", "eur": 15.99},
-    {"date": "2026-06-24", "label": "PlayStation", "chf": "", "eur": 8.99},
-    {"date": "2026-06-26", "label": "AllDebrid", "chf": "", "eur": 2.99},
-    {"date": "2026-06-05", "label": "Floa", "chf": "", "eur": 127.25},
-    {"date": "2026-06-05", "label": "YouTube", "chf": "", "eur": 16.99},
-    {"date": "2026-06-29", "label": "One", "chf": "", "eur": 19.95},
-    {"date": "2026-06-22", "label": "Cloud Apple", "chf": "", "eur": 0.99},
-    {"date": "2026-06-23", "label": "Salt / Mobile+Fibre", "chf": 60.9, "eur": ""},
-    {"date": "2026-06-08", "label": "Helsana", "chf": 391.5, "eur": ""},
-    {"date": "2026-06-26", "label": "AXA Assurance", "chf": 77, "eur": ""},
-    {"date": "2026-06-26", "label": "Plaque Voiture", "chf": 28, "eur": ""},
-    {"date": "2026-06-26", "label": "La Mobilière RC/Ménage", "chf": 11.25, "eur": ""},
-    {"date": "2026-06-06", "label": "ULTRA Revolut", "chf": 65, "eur": ""},
-    {"date": "2026-06-26", "label": "AXA Caution", "chf": 14.5, "eur": ""},
-    {"date": "2026-06-26", "label": "Redevance TV", "chf": 28, "eur": ""},
-    {"date": "2026-06-20", "label": "Electricité", "chf": 80, "eur": ""},
-    {"date": "2026-06-21", "label": "Essence", "chf": 200, "eur": ""},
-    {"date": "2026-06-22", "label": "Course Piccard/Carrefour", "chf": "", "eur": 335.08},
-    {"date": "2026-06-17", "label": "Course Suisse", "chf": 200, "eur": ""},
-    {"date": "2026-06-05", "label": "Plaisir", "chf": 400, "eur": ""},
-    {"date": "2026-06-06", "label": "Bourse", "chf": 100, "eur": ""},
-    {"date": "2026-11-02", "label": "Sport", "chf": 80, "eur": ""}
-  ]
+  // Données neutres uniquement : ne pas publier de budget personnel dans le code source.
+  "salary": 0,
+  "rate": 0.92,
+  "expenses": []
 };
 
 const STORAGE_KEY = "mes-comptes-v12-finale";
