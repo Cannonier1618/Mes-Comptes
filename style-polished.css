@@ -1718,3 +1718,43 @@ td[data-label="Solde"].negative { color:#a95c55; }
 @media (max-width:640px) {
   #expenseDialog .grid2 { grid-template-columns:minmax(0,1fr); }
 }
+
+
+/* V38 — coût annuel calculé à partir du montant mensuel */
+.tablePanel { width:min(100%,1105px); }
+.tablePanel table { width:1105px; min-width:1105px; }
+.tablePanel th:nth-child(7),.tablePanel td:nth-child(7) { width:145px; text-align:right; }
+.tablePanel th:nth-child(8),.tablePanel td:nth-child(8) { width:155px; text-align:right; }
+.tablePanel th:nth-child(9),.tablePanel td:nth-child(9) { width:118px; text-align:center; }
+.tablePanel th:nth-child(8) { background:#eaf3ec; color:#3f684b; }
+.tablePanel td:nth-child(8) { background:#f5f9f5; color:#315f40; font-weight:800; }
+.tablePanel td[data-label="Coût annuel"] { color:#536b81; font-size:11px; font-weight:700; white-space:nowrap; }
+.tablePanel tbody tr.is-selected td:nth-child(8) { background:transparent; }
+:root.dark .tablePanel th:nth-child(8) { background:#2b4033; color:#d1e6d4; }
+:root.dark .tablePanel td:nth-child(8) { background:#202f27; color:#c0dfc6; }
+:root.dark .tablePanel tbody tr.is-selected td:nth-child(8) { background:transparent; }
+@media (max-width:760px) {
+  .tablePanel { width:100%; }
+  .tablePanel table { width:100% !important; min-width:0 !important; }
+  .tablePanel tbody td[data-label="Coût annuel"] {
+    display:flex !important;
+    grid-column:1;
+    justify-content:space-between;
+    gap:10px;
+    min-height:24px;
+    padding:4px 0;
+    background:transparent;
+    font-size:12px;
+  }
+  .tablePanel tbody td[data-label="Coût annuel"]::before {
+    content:attr(data-label);
+    color:#89939d;
+    font-size:10px;
+    font-weight:650;
+  }
+  .tablePanel tbody td.actionsCell { grid-row:1 / span 8; }
+  .tablePanel th:nth-child(8),.tablePanel td:nth-child(8) { background:transparent; }
+  .tablePanel td[data-label="Coût annuel"] { color:#536b81; }
+  :root.dark .tablePanel th:nth-child(8),:root.dark .tablePanel td:nth-child(8) { background:transparent; }
+  :root.dark .tablePanel td[data-label="Coût annuel"] { color:#b8c7d4; }
+}
