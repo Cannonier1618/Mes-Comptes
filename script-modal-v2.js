@@ -511,6 +511,7 @@ function render(){
       <td data-label="CHF" class="${e.chf === "" || e.chf == null ? "emptyMobile" : ""}"><span class="readCell amount">${e.chf === "" || e.chf == null ? "" : escapeHtml(moneyPlainCHF(e.chf))}</span></td>
       <td data-label="EUR" class="${e.eur === "" || e.eur == null ? "emptyMobile" : ""}"><span class="readCell amount">${e.eur === "" || e.eur == null ? "" : escapeHtml(moneyPlainEUR(e.eur))}</span></td>
       <td data-label="Conversion" class="amount ${(e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "emptyMobile" : ""}">${(e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "" : money(converted)}</td>
+      <td data-label="Coût annuel" class="amount annualCost">${money(amountCHF(e) * 12)}</td>
       <td data-label="Solde" class="amount remaining ${running < 0 ? "negative" : "positive"}">${money(running)}</td>
       <td data-label="" class="actionsCell">
         <div class="rowActions">
@@ -523,7 +524,7 @@ function render(){
   });
 
   if (!visible.length) {
-    els.rows.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:32px">Aucune ligne trouvée.</td></tr>`;
+    els.rows.innerHTML = `<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:32px">Aucune ligne trouvée.</td></tr>`;
   }
 }
 
@@ -608,11 +609,11 @@ els.rows.addEventListener("click", event => {
 });
 
 els.exportCsv.addEventListener("click", () => {
-  const header = ["Échéance","Libellé","Montant CHF","Montant EUR","Conversion CHF","Total CHF","À définir","Masquée"];
+  const header = ["Échéance","Libellé","Montant CHF","Montant EUR","Conversion CHF","Coût annuel CHF","Total CHF","À définir","Masquée"];
   const lines = [header];
   state.expenses.forEach((e) => {
     e = normalizeExpense(e);
-    lines.push([formatEcheance(e.date || ""), e.label || "", e.chf || "", e.eur || "", ((e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "" : (Number(e.eur||0)*Number(state.rate||0)).toFixed(2)), amountCHF(e).toFixed(2), safeStatus(e.status || "") === "todo" ? "Oui" : "", isHidden(e) ? "Oui" : ""]);
+    lines.push([formatEcheance(e.date || ""), e.label || "", e.chf || "", e.eur || "", ((e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "" : (Number(e.eur||0)*Number(state.rate||0)).toFixed(2)), (amountCHF(e) * 12).toFixed(2), amountCHF(e).toFixed(2), safeStatus(e.status || "") === "todo" ? "Oui" : "", isHidden(e) ? "Oui" : ""]);
   });
   const csvSafe = value => {
     const text = String(value ?? "");
