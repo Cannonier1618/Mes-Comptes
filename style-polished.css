@@ -1758,3 +1758,17 @@ td[data-label="Solde"].negative { color:#a95c55; }
   :root.dark .tablePanel th:nth-child(8),:root.dark .tablePanel td:nth-child(8) { background:transparent; }
   :root.dark .tablePanel td[data-label="Coût annuel"] { color:#b8c7d4; }
 }
+
+
+/* V39 — garder des cartes uniformément sombres en mode nuit sur mobile */
+@media (max-width:760px) {
+  :root.dark .tablePanel tbody tr,
+  :root.dark .tablePanel tbody tr:nth-child(even),
+  :root.dark .tablePanel tbody tr:hover {
+    background:#1b252e !important;
+    border-color:#34414c;
+  }
+  :root.dark .tablePanel tbody tr.is-selected {
+    background:#283744 !important;
+  }
+}
