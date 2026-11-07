@@ -1772,3 +1772,17 @@ td[data-label="Solde"].negative { color:#a95c55; }
     background:#283744 !important;
   }
 }
+
+
+/* V40 — compatibilite avec le theme clair/sombre du systeme */
+:root { color-scheme:light; }
+:root.dark { color-scheme:dark; }
+.themeBox #themeAuto {
+  width:auto;
+  height:30px;
+  padding:0 9px;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:700;
+}
+.themeBox #themeAuto[hidden] { display:none; }
