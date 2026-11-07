@@ -44,6 +44,11 @@ function persistPendingDeleteIds() {
 
 const DEFAULT_SORT = "date";
 
+const THEME_MODE_KEY = "mes-comptes-theme-mode";
+const THEME_KEY = "mes-comptes-theme";
+let themeMode = localStorage.getItem(THEME_MODE_KEY) === "manual" ? "manual" : "auto";
+const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+
 const els = {
   salary: document.querySelector("#salary"),
   rate: document.querySelector("#rate"),
@@ -64,6 +69,8 @@ const els = {
   exportCsv: document.querySelector("#exportCsv"),
   resetData: document.querySelector("#resetData"),
   themeToggle: document.querySelector("#themeToggle"),
+  themeModeLabel: document.querySelector("#themeModeLabel"),
+  themeAuto: document.querySelector("#themeAuto"),
   dialog: document.querySelector("#expenseDialog"),
   dialogTitle: document.querySelector("#dialogTitle"),
   modalDate: document.querySelector("#modalDate"),
@@ -638,16 +645,42 @@ if (els.resetData) els.resetData.addEventListener("click", () => {
   }
 });
 
+function applyTheme() {
+  const dark = themeMode === "manual"
+    ? localStorage.getItem(THEME_KEY) === "dark"
+    : systemTheme.matches;
+  document.documentElement.classList.toggle("dark", dark);
+  els.themeModeLabel.textContent = themeMode === "auto" ? "Automatique" : "Manuel";
+  els.themeAuto.hidden = themeMode !== "manual";
+  els.themeToggle.textContent = dark ? "☀️" : "🌙";
+  els.themeToggle.title = themeMode === "auto"
+    ? `Passer au thème ${dark ? "clair" : "sombre"} en mode manuel`
+    : "Basculer le thème manuellement";
+  els.themeToggle.setAttribute("aria-label", els.themeToggle.title);
+  els.themeAuto.title = "Revenir au thème automatique du Mac";
+}
+
 els.themeToggle.addEventListener("click", () => {
-  document.documentElement.classList.toggle("dark");
-  localStorage.setItem("mes-comptes-theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
-  els.themeToggle.textContent = document.documentElement.classList.contains("dark") ? "☀️" : "🌙";
+  const nextDark = !document.documentElement.classList.contains("dark");
+  themeMode = "manual";
+  localStorage.setItem(THEME_MODE_KEY, "manual");
+  localStorage.setItem(THEME_KEY, nextDark ? "dark" : "light");
+  applyTheme();
 });
 
-if (localStorage.getItem("mes-comptes-theme") === "dark") {
-  document.documentElement.classList.add("dark");
-  els.themeToggle.textContent = "☀️";
-}
+els.themeAuto.addEventListener("click", () => {
+  themeMode = "auto";
+  localStorage.setItem(THEME_MODE_KEY, "auto");
+  applyTheme();
+});
+
+const handleSystemThemeChange = () => {
+  if (themeMode === "auto") applyTheme();
+};
+if (systemTheme.addEventListener) systemTheme.addEventListener("change", handleSystemThemeChange);
+else if (systemTheme.addListener) systemTheme.addListener(handleSystemThemeChange);
+
+applyTheme();
 
 if (els.sortBy) els.sortBy.value = DEFAULT_SORT;
 render();
