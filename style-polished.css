@@ -1786,3 +1786,9 @@ td[data-label="Solde"].negative { color:#a95c55; }
   font-weight:700;
 }
 .themeBox #themeAuto[hidden] { display:none; }
+
+
+/* V41 — équilibrer l’action restante sur petit écran */
+@media (max-width:760px) {
+  .topActions #exportCsv { grid-column:1/-1; }
+}

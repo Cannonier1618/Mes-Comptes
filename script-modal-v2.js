@@ -67,7 +67,6 @@ const els = {
   sortBy: document.querySelector("#sortBy"),
   addExpense: document.querySelector("#addExpense"),
   exportCsv: document.querySelector("#exportCsv"),
-  resetData: document.querySelector("#resetData"),
   themeToggle: document.querySelector("#themeToggle"),
   themeModeLabel: document.querySelector("#themeModeLabel"),
   themeAuto: document.querySelector("#themeAuto"),
@@ -632,17 +631,6 @@ els.exportCsv.addEventListener("click", () => {
   const a = document.createElement("a");
   a.href = url; a.download = "mes-comptes.csv"; a.click();
   URL.revokeObjectURL(url);
-});
-
-if (els.resetData) els.resetData.addEventListener("click", () => {
-  if (confirm("Restaurer les données d'origine ? Cette action remplacera les dépenses actuelles sur les appareils synchronisés.")) {
-    state.expenses.forEach(item => {
-      if (item && item.id != null) pendingDeleteIds.add(Number(item.id));
-    });
-    state = migrateState(structuredClone(INITIAL_DATA));
-    saveState();
-    render();
-  }
 });
 
 function applyTheme() {
