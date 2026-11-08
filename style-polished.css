@@ -1816,3 +1816,9 @@ td[data-label="Solde"].negative { color:#a95c55; }
   .tablePanel thead th:first-child { border-top-left-radius:13px; }
   .tablePanel thead th:last-child { border-top-right-radius:13px; }
 }
+
+
+/* V44 — laisser l’en-tête adhérer au défilement de la page */
+@media (min-width:761px) {
+  .content { overflow:visible; }
+}
