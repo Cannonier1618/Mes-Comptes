@@ -1822,3 +1822,9 @@ td[data-label="Solde"].negative { color:#a95c55; }
 @media (min-width:761px) {
   .content { overflow:visible; }
 }
+
+
+/* V45 — ne pas créer de conteneur de défilement autour de l’en-tête */
+@media (min-width:761px) {
+  html, body { overflow-x:clip; overflow-y:visible; }
+}
