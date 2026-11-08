@@ -1799,3 +1799,20 @@ td[data-label="Solde"].negative { color:#a95c55; }
 @media (max-width:760px) {
   .cardIcon { font-size:16px; }
 }
+
+
+/* V43 — garder l’en-tête visible pendant le défilement de la page */
+@media (min-width:761px) {
+  .tablePanel,
+  .tablePanel .tableWrap {
+    overflow:visible;
+  }
+  .tablePanel thead th {
+    position:sticky;
+    top:0;
+    z-index:12;
+    box-shadow:0 1px 4px rgba(27,39,51,.12);
+  }
+  .tablePanel thead th:first-child { border-top-left-radius:13px; }
+  .tablePanel thead th:last-child { border-top-right-radius:13px; }
+}
