@@ -1792,3 +1792,10 @@ td[data-label="Solde"].negative { color:#a95c55; }
 @media (max-width:760px) {
   .topActions #exportCsv { grid-column:1/-1; }
 }
+
+
+/* V42 — icônes emoji plus visibles dans les cartes de synthèse */
+.cardIcon { font-size:18px; line-height:1; }
+@media (max-width:760px) {
+  .cardIcon { font-size:16px; }
+}
