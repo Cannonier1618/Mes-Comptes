@@ -17,6 +17,7 @@ const STATUS_META = {
 
 let state = loadLocalState();
 let editingIndex = null;
+let deletingIndex = null;
 let cloudReady = false;
 let isSavingCloud = false;
 let lastCloudSignature = "";
@@ -71,6 +72,9 @@ const els = {
   themeModeLabel: document.querySelector("#themeModeLabel"),
   themeAuto: document.querySelector("#themeAuto"),
   dialog: document.querySelector("#expenseDialog"),
+  deleteDialog: document.querySelector("#deleteDialog"),
+  deleteMessage: document.querySelector("#deleteMessage"),
+  confirmDelete: document.querySelector("#confirmDelete"),
   dialogTitle: document.querySelector("#dialogTitle"),
   modalDate: document.querySelector("#modalDate"),
   modalLabel: document.querySelector("#modalLabel"),
@@ -617,6 +621,29 @@ function saveModal(){
   render();
 }
 
+function openDeleteModal(index){
+  const item = state.expenses[index];
+  if (!item) return;
+  deletingIndex = index;
+  const label = String(item.label || "").trim();
+  els.deleteMessage.textContent = `Veux-tu vraiment supprimer ${label ? `« ${label} »` : "cette dépense"} ?`;
+  els.deleteDialog.showModal();
+}
+
+function confirmDeleteExpense(){
+  const index = deletingIndex;
+  deletingIndex = null;
+  if (index === null || !state.expenses[index]) return;
+  const item = state.expenses[index];
+  if (item.id != null) {
+    pendingDeleteIds.add(Number(item.id));
+    persistPendingDeleteIds();
+  }
+  state.expenses.splice(index, 1);
+  saveState();
+  render();
+}
+
 function cycleStatus(index){
   const current = hasStatus(state.expenses[index].status || "", "todo");
   state.expenses[index].status = setStatusFlag(state.expenses[index].status || "", "todo", !current);
@@ -636,6 +663,10 @@ els.salary.addEventListener("input", () => { state.salary = Number(els.salary.va
 els.rate.addEventListener("input", () => { state.rate = Number(els.rate.value || 0); saveState("settings"); render(); });
 [els.search, els.currencyFilter, els.sortBy].filter(Boolean).forEach(el => el.addEventListener("input", render));
 els.addExpense.addEventListener("click", () => openModal());
+els.confirmDelete.addEventListener("click", confirmDeleteExpense);
+els.deleteDialog.addEventListener("close", () => {
+  if (els.deleteDialog.returnValue !== "confirm") deletingIndex = null;
+});
 els.modalAnnualChf.addEventListener("input", updateMonthlyCHFfromAnnual);
 els.modalAnnualEur.addEventListener("input", updateMonthlyEURfromAnnual);
 els.modalChf.addEventListener("input", updateAnnualModalFromMonthly);
@@ -649,13 +680,7 @@ els.rows.addEventListener("click", event => {
   if (btn.dataset.action === "cycleStatus") cycleStatus(index);
   if (btn.dataset.action === "toggleHidden") toggleHidden(index);
   if (btn.dataset.action === "edit") openModal(index);
-  if (btn.dataset.action === "delete") {
-    const item = state.expenses[index];
-    if (item && item.id != null) { pendingDeleteIds.add(Number(item.id)); persistPendingDeleteIds(); }
-    state.expenses.splice(index, 1);
-    saveState();
-    render();
-  }
+  if (btn.dataset.action === "delete") openDeleteModal(index);
 });
 
 els.exportCsv.addEventListener("click", () => {

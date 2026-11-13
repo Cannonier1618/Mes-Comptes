@@ -1839,3 +1839,28 @@ td[data-label="Solde"].negative { color:#a95c55; }
   font-weight:500;
   line-height:1.4;
 }
+
+
+/* V47 — confirmation explicite avant la suppression d’une dépense */
+#deleteDialog {
+  width:min(440px, calc(100vw - 24px));
+  max-width:calc(100vw - 24px);
+  max-height:calc(100vh - 24px);
+  max-height:calc(100dvh - 24px);
+  border:0;
+  border-radius:22px;
+  padding:0;
+  background:transparent;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+#deleteDialog::backdrop { background:rgba(3,7,18,.55); backdrop-filter:blur(4px); }
+#deleteDialog > .deleteModal { width:100%; min-width:0; gap:14px; }
+.deleteMessage { margin:0; color:var(--muted); line-height:1.5; }
+.deleteConfirmButton { background:#a94442 !important; color:#fff !important; border-color:#a94442 !important; }
+.deleteConfirmButton:hover { background:#8f3433 !important; }
+:root.dark .deleteConfirmButton { background:#b85956 !important; border-color:#b85956 !important; }
+@media (max-width:640px) {
+  #deleteDialog { width:calc(100vw - 20px); max-width:calc(100vw - 20px); max-height:calc(100vh - 20px); max-height:calc(100dvh - 20px); }
+  #deleteDialog > .deleteModal { gap:12px; padding:16px; }
+}
