@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mes comptes — privé</title>
-  <link rel="stylesheet" href="style-polished.css?v=22">
+  <link rel="stylesheet" href="style-polished.css?v=23">
 </head>
 <body>
   <div class="app">
@@ -132,8 +132,12 @@
         <input id="modalLabel" placeholder="Ex : Courses">
       </label>
       <div class="grid2">
-        <label>Montant CHF
-          <input id="modalChf" type="number" step="0.01" min="0">
+        <label>Montant annuel CHF
+          <input id="modalAnnualChf" type="number" step="0.01" min="0" placeholder="Ex : 1200">
+        </label>
+        <small class="modalHint">Le montant annuel est divisé par 12 pour remplir le montant CHF par mois.</small>
+        <label>Montant CHF par mois
+          <input id="modalChf" type="number" step="0.0001" min="0">
         </label>
         <label>Montant EUR
           <input id="modalEur" type="number" step="0.01" min="0">
@@ -148,7 +152,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth-gate.js"></script>
-  <script src="script-modal-v2.js?v=remove-reset-20261107"></script>
+  <script src="script-modal-v2.js?v=annual-input-20261113"></script>
   <script src="row-selection-v1.js"></script>
 </body>
 </html>
