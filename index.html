@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mes comptes — privé</title>
-  <link rel="stylesheet" href="style-polished.css?v=24">
+  <link rel="stylesheet" href="style-polished.css?v=25">
 </head>
 <body>
   <div class="app">
@@ -155,9 +155,20 @@
     </form>
   </dialog>
 
+  <dialog id="deleteDialog" aria-labelledby="deleteDialogTitle" aria-describedby="deleteMessage">
+    <form method="dialog" class="modal deleteModal">
+      <h2 id="deleteDialogTitle">Supprimer cette dépense ?</h2>
+      <p id="deleteMessage" class="deleteMessage"></p>
+      <div class="modalActions">
+        <button value="cancel" autofocus>Annuler</button>
+        <button class="deleteConfirmButton" id="confirmDelete" value="confirm">Supprimer</button>
+      </div>
+    </form>
+  </dialog>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth-gate.js"></script>
-  <script src="script-modal-v2.js?v=annual-input-cursor-20261113"></script>
+  <script src="script-modal-v2.js?v=confirm-delete-20261113"></script>
   <script src="row-selection-v1.js"></script>
 </body>
 </html>
