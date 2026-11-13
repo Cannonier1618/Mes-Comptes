@@ -76,6 +76,7 @@ const els = {
   modalLabel: document.querySelector("#modalLabel"),
   modalChf: document.querySelector("#modalChf"),
   modalAnnualChf: document.querySelector("#modalAnnualChf"),
+  modalAnnualEur: document.querySelector("#modalAnnualEur"),
   modalEur: document.querySelector("#modalEur"),
   modalStatus: document.querySelector("#modalStatus"),
   saveExpense: document.querySelector("#saveExpense")
@@ -541,13 +542,16 @@ function escapeAttr(value){
 function escapeHtml(value){ return escapeAttr(value); }
 
 function updateAnnualModalFromMonthly(){
-  const hasAmount = els.modalChf.value !== "" || els.modalEur.value !== "";
-  if (!hasAmount) {
+  const hasCHF = els.modalChf.value !== "";
+  const hasEUR = els.modalEur.value !== "";
+  if (!hasCHF && !hasEUR) {
     els.modalAnnualChf.value = "";
+    els.modalAnnualEur.value = "";
     return;
   }
   const monthlyTotalCHF = Number(els.modalChf.value || 0) + Number(els.modalEur.value || 0) * Number(state.rate || 0);
   els.modalAnnualChf.value = (monthlyTotalCHF * 12).toFixed(2);
+  els.modalAnnualEur.value = hasEUR ? (Number(els.modalEur.value) * 12).toFixed(2) : "";
 }
 
 function updateMonthlyCHFfromAnnual(){
@@ -558,6 +562,18 @@ function updateMonthlyCHFfromAnnual(){
   }
   els.modalChf.value = (Number(els.modalAnnualChf.value) / 12).toFixed(4);
   els.modalEur.value = "";
+  updateAnnualModalFromMonthly();
+}
+
+function updateMonthlyEURfromAnnual(){
+  if (els.modalAnnualEur.value === "") {
+    els.modalEur.value = "";
+    updateAnnualModalFromMonthly();
+    return;
+  }
+  els.modalEur.value = (Number(els.modalAnnualEur.value) / 12).toFixed(4);
+  els.modalChf.value = "";
+  updateAnnualModalFromMonthly();
 }
 
 function openModal(index = null){
@@ -573,6 +589,7 @@ function openModal(index = null){
   els.modalEur.value = e.eur || "";
   const hasAmount = e.chf !== "" && e.chf != null || e.eur !== "" && e.eur != null;
   els.modalAnnualChf.value = hasAmount ? (amountCHF(e) * 12).toFixed(2) : "";
+  els.modalAnnualEur.value = e.eur !== "" && e.eur != null ? (Number(e.eur) * 12).toFixed(2) : "";
 
   els.dialog.showModal();
 }
@@ -620,6 +637,7 @@ els.rate.addEventListener("input", () => { state.rate = Number(els.rate.value ||
 [els.search, els.currencyFilter, els.sortBy].filter(Boolean).forEach(el => el.addEventListener("input", render));
 els.addExpense.addEventListener("click", () => openModal());
 els.modalAnnualChf.addEventListener("input", updateMonthlyCHFfromAnnual);
+els.modalAnnualEur.addEventListener("input", updateMonthlyEURfromAnnual);
 els.modalChf.addEventListener("input", updateAnnualModalFromMonthly);
 els.modalEur.addEventListener("input", updateAnnualModalFromMonthly);
 els.saveExpense.addEventListener("click", saveModal);
