@@ -541,39 +541,39 @@ function escapeAttr(value){
 }
 function escapeHtml(value){ return escapeAttr(value); }
 
-function updateAnnualModalFromMonthly(){
+function updateAnnualModalFromMonthly(preserveAnnual = ""){
   const hasCHF = els.modalChf.value !== "";
   const hasEUR = els.modalEur.value !== "";
   if (!hasCHF && !hasEUR) {
-    els.modalAnnualChf.value = "";
-    els.modalAnnualEur.value = "";
+    if (preserveAnnual !== "chf") els.modalAnnualChf.value = "";
+    if (preserveAnnual !== "eur") els.modalAnnualEur.value = "";
     return;
   }
   const monthlyTotalCHF = Number(els.modalChf.value || 0) + Number(els.modalEur.value || 0) * Number(state.rate || 0);
-  els.modalAnnualChf.value = (monthlyTotalCHF * 12).toFixed(2);
-  els.modalAnnualEur.value = hasEUR ? (Number(els.modalEur.value) * 12).toFixed(2) : "";
+  if (preserveAnnual !== "chf") els.modalAnnualChf.value = (monthlyTotalCHF * 12).toFixed(2);
+  if (preserveAnnual !== "eur") els.modalAnnualEur.value = hasEUR ? (Number(els.modalEur.value) * 12).toFixed(2) : "";
 }
 
 function updateMonthlyCHFfromAnnual(){
   if (els.modalAnnualChf.value === "") {
     els.modalChf.value = "";
-    updateAnnualModalFromMonthly();
+    updateAnnualModalFromMonthly("chf");
     return;
   }
   els.modalChf.value = (Number(els.modalAnnualChf.value) / 12).toFixed(4);
   els.modalEur.value = "";
-  updateAnnualModalFromMonthly();
+  updateAnnualModalFromMonthly("chf");
 }
 
 function updateMonthlyEURfromAnnual(){
   if (els.modalAnnualEur.value === "") {
     els.modalEur.value = "";
-    updateAnnualModalFromMonthly();
+    updateAnnualModalFromMonthly("eur");
     return;
   }
   els.modalEur.value = (Number(els.modalAnnualEur.value) / 12).toFixed(4);
   els.modalChf.value = "";
-  updateAnnualModalFromMonthly();
+  updateAnnualModalFromMonthly("eur");
 }
 
 function openModal(index = null){
