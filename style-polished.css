@@ -1828,3 +1828,14 @@ td[data-label="Solde"].negative { color:#a95c55; }
 @media (min-width:761px) {
   html, body { overflow-x:clip; overflow-y:visible; }
 }
+
+
+/* V46 — champ annuel et indication du montant mensuel */
+.modalHint {
+  display:block;
+  margin-top:-8px;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:500;
+  line-height:1.4;
+}

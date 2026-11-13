@@ -75,6 +75,7 @@ const els = {
   modalDate: document.querySelector("#modalDate"),
   modalLabel: document.querySelector("#modalLabel"),
   modalChf: document.querySelector("#modalChf"),
+  modalAnnualChf: document.querySelector("#modalAnnualChf"),
   modalEur: document.querySelector("#modalEur"),
   modalStatus: document.querySelector("#modalStatus"),
   saveExpense: document.querySelector("#saveExpense")
@@ -539,6 +540,26 @@ function escapeAttr(value){
 }
 function escapeHtml(value){ return escapeAttr(value); }
 
+function updateAnnualModalFromMonthly(){
+  const hasAmount = els.modalChf.value !== "" || els.modalEur.value !== "";
+  if (!hasAmount) {
+    els.modalAnnualChf.value = "";
+    return;
+  }
+  const monthlyTotalCHF = Number(els.modalChf.value || 0) + Number(els.modalEur.value || 0) * Number(state.rate || 0);
+  els.modalAnnualChf.value = (monthlyTotalCHF * 12).toFixed(2);
+}
+
+function updateMonthlyCHFfromAnnual(){
+  if (els.modalAnnualChf.value === "") {
+    els.modalChf.value = "";
+    updateAnnualModalFromMonthly();
+    return;
+  }
+  els.modalChf.value = (Number(els.modalAnnualChf.value) / 12).toFixed(4);
+  els.modalEur.value = "";
+}
+
 function openModal(index = null){
   editingIndex = index;
   const e = index === null
@@ -550,6 +571,8 @@ function openModal(index = null){
   els.modalLabel.value = e.label || "";
   els.modalChf.value = e.chf || "";
   els.modalEur.value = e.eur || "";
+  const hasAmount = e.chf !== "" && e.chf != null || e.eur !== "" && e.eur != null;
+  els.modalAnnualChf.value = hasAmount ? (amountCHF(e) * 12).toFixed(2) : "";
 
   els.dialog.showModal();
 }
@@ -596,6 +619,9 @@ els.salary.addEventListener("input", () => { state.salary = Number(els.salary.va
 els.rate.addEventListener("input", () => { state.rate = Number(els.rate.value || 0); saveState("settings"); render(); });
 [els.search, els.currencyFilter, els.sortBy].filter(Boolean).forEach(el => el.addEventListener("input", render));
 els.addExpense.addEventListener("click", () => openModal());
+els.modalAnnualChf.addEventListener("input", updateMonthlyCHFfromAnnual);
+els.modalChf.addEventListener("input", updateAnnualModalFromMonthly);
+els.modalEur.addEventListener("input", updateAnnualModalFromMonthly);
 els.saveExpense.addEventListener("click", saveModal);
 
 els.rows.addEventListener("click", event => {
