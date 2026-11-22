@@ -1886,3 +1886,72 @@ td[data-label="Solde"].negative { color:#a95c55; }
   .tablePanel td[data-label="Coût annuel"] { color:#536b81; }
   :root.dark .tablePanel td[data-label="Coût annuel"] { color:#b8c7d4; }
 }
+
+
+/* V49 — tableau plus court et palette équilibrée en clair/sombre */
+.tablePanel {
+  width:min(100%,800px) !important;
+  max-width:100%;
+  border:1px solid #d9e1e7 !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  box-shadow:0 5px 18px rgba(30,48,64,.06) !important;
+}
+.tablePanel .tableWrap { width:100%; }
+.tablePanel table {
+  width:800px !important;
+  min-width:800px !important;
+  max-width:800px !important;
+}
+.tablePanel th:nth-child(8),
+.tablePanel td:nth-child(8) { display:none !important; }
+.tablePanel th {
+  background:#536b80 !important;
+  color:#f7fafc !important;
+  border-bottom:2px solid #40586d !important;
+}
+.tablePanel th:nth-child(7) {
+  background:#e6efe8 !important;
+  color:#42634c !important;
+}
+.tablePanel tbody tr { background:#fff; }
+.tablePanel tbody tr:nth-child(even) { background:#f6f8fa; }
+.tablePanel tbody tr:hover { background:#edf2f6; }
+.tablePanel tbody tr:hover td { background:transparent; }
+.tablePanel td:nth-child(7) { background:#f1f6f2; color:#506b59; }
+.tablePanel tbody tr.is-selected td:nth-child(7) { background:transparent; }
+.tablePanel th:nth-child(3),.tablePanel td:nth-child(3) { border-right-color:#e0e6eb; }
+
+:root.dark .tablePanel {
+  border-color:#35434e !important;
+  background:#18232c !important;
+  box-shadow:0 8px 22px rgba(0,0,0,.16) !important;
+}
+:root.dark .tablePanel th {
+  background:#354a5b !important;
+  color:#eef3f6 !important;
+  border-bottom-color:#293b49 !important;
+}
+:root.dark .tablePanel th:nth-child(7) {
+  background:#2b3d34 !important;
+  color:#d1e2d5 !important;
+}
+:root.dark .tablePanel tbody tr { background:#1a252e; }
+:root.dark .tablePanel tbody tr:nth-child(even) { background:#1e2a34; }
+:root.dark .tablePanel tbody tr:hover { background:#273640; }
+:root.dark .tablePanel td:nth-child(7) {
+  background:#202e27;
+  color:#bfd2c4;
+}
+:root.dark .tablePanel tbody tr.is-selected td:nth-child(7) { background:transparent; }
+:root.dark .tablePanel th:nth-child(3),:root.dark .tablePanel td:nth-child(3) { border-right-color:#34424d; }
+
+@media (max-width:760px) {
+  .tablePanel { width:100% !important; }
+  .tablePanel table {
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+  }
+  .tablePanel th:nth-child(8),.tablePanel td:nth-child(8) { display:none !important; }
+}
