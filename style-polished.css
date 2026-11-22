@@ -1888,9 +1888,9 @@ td[data-label="Solde"].negative { color:#a95c55; }
 }
 
 
-/* V49 — tableau plus court et palette équilibrée en clair/sombre */
+/* V50 — conserver les commandes de ligne, sans colonne de solde */
 .tablePanel {
-  width:min(100%,800px) !important;
+  width:min(100%,918px) !important;
   max-width:100%;
   border:1px solid #d9e1e7 !important;
   border-radius:14px !important;
@@ -1899,12 +1899,15 @@ td[data-label="Solde"].negative { color:#a95c55; }
 }
 .tablePanel .tableWrap { width:100%; }
 .tablePanel table {
-  width:800px !important;
-  min-width:800px !important;
-  max-width:800px !important;
+  width:918px !important;
+  min-width:918px !important;
+  max-width:918px !important;
 }
-.tablePanel th:nth-child(8),
-.tablePanel td:nth-child(8) { display:none !important; }
+.tablePanel td.actionsCell { display:table-cell !important; }
+.tablePanel th:nth-child(8),.tablePanel td:nth-child(8) {
+  display:table-cell !important;
+  width:118px;
+}
 .tablePanel th {
   background:#536b80 !important;
   color:#f7fafc !important;
@@ -1953,5 +1956,5 @@ td[data-label="Solde"].negative { color:#a95c55; }
     min-width:0 !important;
     max-width:100% !important;
   }
-  .tablePanel th:nth-child(8),.tablePanel td:nth-child(8) { display:none !important; }
+  .tablePanel tbody td.actionsCell { display:flex !important; }
 }
