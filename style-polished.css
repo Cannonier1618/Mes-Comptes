@@ -1864,3 +1864,25 @@ td[data-label="Solde"].negative { color:#a95c55; }
   #deleteDialog { width:calc(100vw - 20px); max-width:calc(100vw - 20px); max-height:calc(100vh - 20px); max-height:calc(100dvh - 20px); }
   #deleteDialog > .deleteModal { gap:12px; padding:16px; }
 }
+
+
+/* V48 — retirer la colonne du solde restant sans toucher aux calculs de synthèse */
+.tablePanel table { width:950px; min-width:950px; }
+.tablePanel th:nth-child(7),.tablePanel td:nth-child(7) { width:145px; text-align:right; }
+.tablePanel th:nth-child(8),.tablePanel td:nth-child(8) { width:118px; text-align:center; }
+.tablePanel th:nth-child(7) { background:#eaf3ec; color:#3f684b; }
+.tablePanel td:nth-child(7) { background:#f5f9f5; color:#536b81; font-weight:700; }
+.tablePanel tbody tr.is-selected td:nth-child(7) { background:transparent; }
+:root.dark .tablePanel th:nth-child(7) { background:#2b4033; color:#d1e6d4; }
+:root.dark .tablePanel td:nth-child(7) { background:#202f27; color:#b8c7d4; }
+:root.dark .tablePanel tbody tr.is-selected td:nth-child(7) { background:transparent; }
+.tablePanel th:nth-child(8) { background:#586f84; color:#fff; }
+.tablePanel td:nth-child(8) { background:transparent; color:inherit; font-weight:400; }
+@media (max-width:760px) {
+  .tablePanel table { width:100% !important; min-width:0 !important; }
+  .tablePanel th:nth-child(7),.tablePanel td:nth-child(7),
+  .tablePanel th:nth-child(8),.tablePanel td:nth-child(8) { background:transparent; }
+  .tablePanel tbody td.actionsCell { grid-row:1 / span 7; }
+  .tablePanel td[data-label="Coût annuel"] { color:#536b81; }
+  :root.dark .tablePanel td[data-label="Coût annuel"] { color:#b8c7d4; }
+}

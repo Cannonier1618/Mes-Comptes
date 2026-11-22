@@ -501,13 +501,11 @@ function render(){
   els.progressFill.style.width = percent + "%";
 
   const visible = getVisibleExpenses();
-  let running = Number(state.salary || 0);
   els.rows.innerHTML = "";
 
   visible.forEach((e) => {
     const converted = Number(e.eur || 0) * Number(state.rate || 0);
     const hidden = isHidden(e);
-    running -= activeAmountCHF(e);
     const st = safeStatus(e.status || "");
     const tip = escapeAttr(statusTooltip(e));
     const tr = document.createElement("tr");
@@ -524,7 +522,6 @@ function render(){
       <td data-label="EUR" class="${e.eur === "" || e.eur == null ? "emptyMobile" : ""}"><span class="readCell amount">${e.eur === "" || e.eur == null ? "" : escapeHtml(moneyPlainEUR(e.eur))}</span></td>
       <td data-label="Conversion" class="amount ${(e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "emptyMobile" : ""}">${(e.eur === "" || e.eur == null || Number(e.eur) === 0) ? "" : money(converted)}</td>
       <td data-label="Coût annuel" class="amount annualCost">${money(amountCHF(e) * 12)}</td>
-      <td data-label="Solde" class="amount remaining ${running < 0 ? "negative" : "positive"}">${money(running)}</td>
       <td data-label="" class="actionsCell">
         <div class="rowActions">
           <button class="iconBtn hideBtn ${hidden ? "active" : ""}" data-action="toggleHidden" data-index="${e.index}" title="${hidden ? "Réintégrer dans le calcul" : "Masquer du calcul"}">${hidden ? "◉" : "○"}</button>
@@ -536,7 +533,7 @@ function render(){
   });
 
   if (!visible.length) {
-    els.rows.innerHTML = `<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:32px">Aucune ligne trouvée.</td></tr>`;
+    els.rows.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:32px">Aucune ligne trouvée.</td></tr>`;
   }
 }
 
