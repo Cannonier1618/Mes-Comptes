@@ -2157,3 +2157,47 @@ button:focus-visible,input:focus-visible,select:focus-visible {
   .tablePanel td[data-label="CHF"] .amount:not(:empty),
   .tablePanel td[data-label="EUR"] .amount:not(:empty) { font-size:12px !important; }
 }
+
+
+/* V53 — échelle typographique cohérente sur toute la page */
+body { font-size:14px; }
+button,input,select { font:inherit; }
+.themeBox { font-size:13px; }
+.sidebarFooter { font-size:12px; }
+.rateHead strong { font-size:12px; }
+.rateHead span,.rateBox small { font-size:11px; }
+.moneyBox input,.rateBox input { font-size:16px; }
+.topbar p { font-size:15px; line-height:1.45; }
+.topActions button,.toolbar select { font-size:13px; }
+.searchBox input { font-size:14px; }
+.cards .card span,.cardsV3 .card span { font-size:12px; }
+.cards .card small,.cardsV3 .card small { font-size:12px; }
+.cards .card strong,.cardsV3 .card strong { font-size:27px; }
+.cards .card small b,.cardsV3 .card small b { font-size:12px; }
+.tablePanel th { font-size:11px !important; }
+.tablePanel tbody td { font-size:14px !important; }
+.tablePanel td[data-label="Échéance"] .readCell { font-size:12px !important; }
+.tablePanel td[data-label="Libellé"] .readCell { font-size:14px !important; }
+.tablePanel td[data-label="CHF"] .amount:not(:empty),
+.tablePanel td[data-label="EUR"] .amount:not(:empty),
+.tablePanel td[data-label="Conversion"],
+.tablePanel td[data-label="Coût annuel"] {
+  font-size:14px !important;
+  font-variant-numeric:tabular-nums;
+}
+@media (max-width:760px) {
+  .topbar p { font-size:14px; }
+  .topActions button,.toolbar select { font-size:13px; }
+  .searchBox input { font-size:14px; }
+  .cards .card span,.cardsV3 .card span { font-size:11px; }
+  .cards .card strong,.cardsV3 .card strong { font-size:20px; }
+  .cards .card small,.cardsV3 .card small { font-size:11px; }
+  .tablePanel tbody td[data-label="Échéance"] { font-size:12px !important; }
+  .tablePanel tbody td[data-label="Libellé"] .readCell { font-size:15px !important; }
+  .tablePanel tbody td[data-label="CHF"],
+  .tablePanel tbody td[data-label="EUR"],
+  .tablePanel tbody td[data-label="Conversion"],
+  .tablePanel tbody td[data-label="Coût annuel"] { font-size:13px !important; }
+  .tablePanel td[data-label="CHF"] .amount:not(:empty),
+  .tablePanel td[data-label="EUR"] .amount:not(:empty) { font-size:13px !important; }
+}
