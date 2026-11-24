@@ -2118,3 +2118,42 @@ button:focus-visible,input:focus-visible,select:focus-visible {
     background:#1d282b !important;
   }
 }
+
+
+/* V52 — tableau plus lisible, sans modifier ses proportions */
+.tablePanel th {
+  font-size:11px !important;
+  letter-spacing:.055em;
+}
+.tablePanel tbody td {
+  font-size:14px !important;
+  line-height:1.35;
+}
+.tablePanel td[data-label="Échéance"] .readCell {
+  font-size:12px !important;
+  font-weight:700;
+}
+.tablePanel td[data-label="Libellé"] .readCell {
+  font-size:14px !important;
+  font-weight:700;
+}
+.tablePanel td[data-label="CHF"] .amount:not(:empty),
+.tablePanel td[data-label="EUR"] .amount:not(:empty) {
+  font-size:13px !important;
+}
+.tablePanel td[data-label="Conversion"],
+.tablePanel td[data-label="Coût annuel"] {
+  font-size:14px !important;
+  font-weight:700;
+}
+@media (max-width:760px) {
+  .tablePanel th { font-size:11px !important; }
+  .tablePanel tbody td[data-label="Échéance"] { font-size:12px !important; }
+  .tablePanel tbody td[data-label="Libellé"] .readCell { font-size:15px !important; }
+  .tablePanel tbody td[data-label="CHF"],
+  .tablePanel tbody td[data-label="EUR"],
+  .tablePanel tbody td[data-label="Conversion"],
+  .tablePanel tbody td[data-label="Coût annuel"] { font-size:13px !important; }
+  .tablePanel td[data-label="CHF"] .amount:not(:empty),
+  .tablePanel td[data-label="EUR"] .amount:not(:empty) { font-size:12px !important; }
+}
