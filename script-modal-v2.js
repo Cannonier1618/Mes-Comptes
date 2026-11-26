@@ -25,6 +25,7 @@ let localRevision = 0;
 let localDirty = false;
 let saveTimer = null;
 let syncQueue = Promise.resolve();
+let expenseSubmitLocked = false;
 const PENDING_DELETES_KEY = "mes-comptes-pending-deletes-v1";
 function loadPendingDeleteIds() {
   try {
@@ -195,6 +196,17 @@ async function writeSettingsCloud(snapshot) {
   });
 }
 
+function ensureLocalExpenseKeys(expenses = state.expenses) {
+  let changed = false;
+  for (const expense of expenses || []) {
+    if (expense && expense.id == null && !expense.localId) {
+      expense.localId = `local-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      changed = true;
+    }
+  }
+  return changed;
+}
+
 async function writeExpensesCloud(snapshot, revisionAtStart) {
   const expenses = snapshot.expenses || [];
 
@@ -232,12 +244,26 @@ async function writeExpensesCloud(snapshot, revisionAtStart) {
     if (!Array.isArray(created) || !created.length || created[0].id == null) {
       throw new Error("Impossible de créer une dépense.");
     }
-    expenses[index].id = Number(created[0].id);
-    // Persist each newly assigned cloud ID immediately so a later network error
-    // cannot make the next retry create the same expense a second time.
-    if (revisionAtStart === localRevision && state.expenses[index]) {
-      state.expenses[index].id = expenses[index].id;
+    const createdId = Number(created[0].id);
+    const localId = expenses[index].localId;
+    expenses[index].id = createdId;
+    delete expenses[index].localId;
+
+    // Attach the cloud ID to the matching live row even if the user changed
+    // another value while this request was in flight. This prevents a retry
+    // from inserting the same unsaved row a second time.
+    const liveExpense = localId
+      ? state.expenses.find(row => row.localId === localId)
+      : (revisionAtStart === localRevision ? state.expenses[index] : null);
+    if (liveExpense) {
+      liveExpense.id = createdId;
+      delete liveExpense.localId;
       saveLocalState();
+    } else {
+      // The user may have removed this local row before the insert completed.
+      await supabaseFetch(`/expenses?id=eq.${encodeURIComponent(createdId)}`, {
+        method: "DELETE"
+      });
     }
   }
 
@@ -251,6 +277,7 @@ async function writeExpensesCloud(snapshot, revisionAtStart) {
 }
 
 async function saveCloudState() {
+  if (ensureLocalExpenseKeys()) saveLocalState();
   const revisionAtStart = localRevision;
   const snapshot = structuredClone(state);
   isSavingCloud = true;
@@ -274,6 +301,7 @@ async function saveCloudState() {
 }
 
 async function saveCloudSnapshot() {
+  if (ensureLocalExpenseKeys()) saveLocalState();
   const revisionAtStart = localRevision;
   const snapshot = structuredClone(state);
   isSavingCloud = true;
@@ -344,6 +372,7 @@ function saveLocalState(){
 }
 
 function saveState(){
+  ensureLocalExpenseKeys();
   saveLocalState();
   localRevision++;
   localDirty = true;
@@ -578,6 +607,7 @@ function updateMonthlyEURfromAnnual(){
 }
 
 function openModal(index = null){
+  expenseSubmitLocked = false;
   editingIndex = index;
   const e = index === null
     ? {date:"", label:"", chf:"", eur:"", status:""}
@@ -596,9 +626,12 @@ function openModal(index = null){
 }
 
 function saveModal(){
+  if (expenseSubmitLocked || !els.dialog.open) return;
+  expenseSubmitLocked = true;
   const previous = editingIndex === null ? {} : normalizeExpense(state.expenses[editingIndex] || {});
   const item = {
     id: previous.id,
+    localId: previous.id == null ? (previous.localId || `local-${Date.now()}-${Math.random().toString(36).slice(2)}`) : undefined,
     date: extractDay(els.modalDate.value),
     label: els.modalLabel.value.trim(),
     chf: els.modalChf.value === "" ? "" : Number(els.modalChf.value),
@@ -616,6 +649,7 @@ function saveModal(){
   }
   saveState();
   render();
+  if (els.dialog.open) els.dialog.close();
 }
 
 function openDeleteModal(index){
@@ -668,7 +702,14 @@ els.modalAnnualChf.addEventListener("input", updateMonthlyCHFfromAnnual);
 els.modalAnnualEur.addEventListener("input", updateMonthlyEURfromAnnual);
 els.modalChf.addEventListener("input", updateAnnualModalFromMonthly);
 els.modalEur.addEventListener("input", updateAnnualModalFromMonthly);
-els.saveExpense.addEventListener("click", saveModal);
+els.saveExpense.addEventListener("click", event => {
+  event.preventDefault();
+  saveModal();
+});
+els.dialog.addEventListener("close", () => {
+  expenseSubmitLocked = false;
+  editingIndex = null;
+});
 
 els.rows.addEventListener("click", event => {
   const btn = event.target.closest("button[data-action]");
